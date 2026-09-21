@@ -1,0 +1,5 @@
+kafka_adapter_test 11 0.00725607
+real_cpp_kafka_test 13 0.0539839
+kafka_pipeline_bridge_test 6 0.412439
+kafka_pipeline_bridge_benchmark 0 0
+---

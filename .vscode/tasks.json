@@ -1,0 +1,19 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "NexusFlow: Build",
+            "type": "shell",
+            "command": "cmake --build build --config Debug",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "NexusFlow: Run",
+            "type": "shell",
+            "command": ".\\build\\Debug\\nexusflow.exe",
+            "dependsOn": "NexusFlow: Build",
+            "problemMatcher": []
+        }
+    ]
+}

@@ -1,0 +1,11 @@
+{
+    "C_Cpp.default.cppStandard": "c++20",
+    "C_Cpp.default.cStandard": "c17",
+    "editor.formatOnSave": true,
+    "files.exclude": {
+        "**/.git": true,
+        "**/build": true,
+        "**/__pycache__": true
+    },
+    "python.analysis.typeCheckingMode": "basic"
+}

@@ -1,57 +1,39 @@
 ﻿# =========================
-# CMake / Build
+# Build / Generated
 # =========================
 build/
-build-*/
+build_*/
+build_release/
+build_release_clean/
+build_runtime_observability/
 cmake-build-*/
 out/
 bin/
 obj/
 
 # =========================
-# Visual Studio
+# Visual Studio / CMake
 # =========================
 .vs/
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
-
-# =========================
-# CMake Generated
-# =========================
-CMakeCache.txt
 CMakeFiles/
+CMakeCache.txt
 cmake_install.cmake
 install_manifest.txt
 CTestTestfile.cmake
-Makefile
-
-# =========================
-# Compiled / Binary Files
-# =========================
-*.exe
-*.dll
-*.so
-*.a
-*.lib
-*.obj
-*.o
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.tlog/
+*.recipe
+*.lastbuildstate
 *.pdb
 *.ilk
-
-# =========================
-# Logs / Temporary
-# =========================
-*.log
-*.tmp
-*.temp
-
-# =========================
-# OS
-# =========================
-.DS_Store
-Thumbs.db
+*.obj
+*.o
+*.a
+*.lib
+*.dll
+*.exe
 
 # =========================
 # Python
@@ -60,15 +42,40 @@ __pycache__/
 *.py[cod]
 .venv/
 venv/
-ENV/
 env/
+ENV/
 
 # =========================
-# IDE
+# Logs
 # =========================
-.idea/
-.vscode/
+*.log
 
+# =========================
+# OS
+# =========================
+.DS_Store
+Thumbs.db
 
-data/processed/*.csv
+# =========================
+# Temporary / Backup
+# =========================
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# =========================
+# Runtime generated data
+# =========================
+data/tempo/
+profiling/results/*.data
+
+# =========================
+# Secrets
+# =========================
+.env
+.env.*
+!.env.example
+!.env.*.example
+docker/config/.env.production
 

@@ -1,0 +1,9 @@
+# ninja log v7
+3623	17760	1789968244308060600	networking/protocol/CMakeFiles/nexusflow_event_protocol.dir/event_protocol.cpp.o	1f54259cbbafd163
+18403	19502	1789968259065582400	networking/protocol/libnexusflow_event_protocol.a	7aab23a001a5a62d
+3765	21101	1789968244452424300	networking/bridge/CMakeFiles/nexusflow_tcp_pipeline_bridge.dir/tcp_pipeline_bridge.cpp.o	fe4e7c5e29be33e7
+19503	34393	1789968260169234300	networking/bridge/CMakeFiles/nexusflow_tcp_pipeline_bridge.dir/tcp_core_pipeline.cpp.o	6580bffb2eb0dc8b
+21231	43513	1789968261894335400	networking/bridge/CMakeFiles/nexusflow_tcp_pipeline_bridge.dir/tcp_adaptive_pipeline.cpp.o	91101122dc61ff49
+43720	49371	1789968284393768100	networking/bridge/CMakeFiles/nexusflow_tcp_pipeline_bridge.dir/__/__/core/event/event.cpp.o	eb42c39271b0e984
+34541	57474	1789968275224944200	networking/bridge/CMakeFiles/nexusflow_tcp_pipeline_bridge.dir/__/__/core/processor/integrated_adaptive_pipeline.cpp.o	d22130e846383f06
+49404	61107	1789968290084442600	networking/bridge/CMakeFiles/nexusflow_tcp_pipeline_bridge.dir/__/__/core/processor/event_processor.cpp.o	c631289dd24258ef
