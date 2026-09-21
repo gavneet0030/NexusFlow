@@ -79,3 +79,4 @@ profiling/results/*.data
 !.env.*.example
 docker/config/.env.production
 
+*.env

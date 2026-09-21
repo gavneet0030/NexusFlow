@@ -1,0 +1,73 @@
+﻿name: NexusFlow Linux Build
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+concurrency:
+  group: nexusflow-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Linux C++ Build
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            cmake \
+            ninja-build \
+            pkg-config \
+            protobuf-compiler \
+            libprotobuf-dev \
+            protobuf-compiler-grpc \
+            libgrpc++-dev \
+            libgrpc-dev \
+            libssl-dev \
+            libcurl4-openssl-dev \
+            libpq-dev \
+            librdkafka-dev \
+            libhiredis-dev \
+            uuid-dev
+
+      - name: Show toolchain versions
+        run: |
+          cmake --version
+          ninja --version
+          g++ --version
+          protoc --version
+
+      - name: Configure CMake
+        run: |
+          cmake -S . -B build/ci \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build NexusFlow
+        run: |
+          cmake --build build/ci \
+            --config Release \
+            --parallel
+
+      - name: Upload build logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nexusflow-build-logs
+          path: |
+            build/ci/CMakeCache.txt
+            build/ci/CMakeFiles
+          if-no-files-found: ignore

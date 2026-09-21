@@ -1,4 +1,4 @@
-﻿add_library(nexusflow_opentelemetry
+add_library(nexusflow_opentelemetry
     src/trace_context.cpp
     src/otlp_exporter.cpp
     generated/trace.pb.cc
@@ -18,12 +18,19 @@ target_compile_features(nexusflow_opentelemetry
 
 # Keep OpenTelemetry on the same Protobuf package used by gRPC.
 if(WIN32)
+    set(NEXUSFLOW_UCRT64_PREFIX "C:/msys64/ucrt64")
+
     set(Protobuf_DIR
-        "C:/Users/PC/anaconda3/Library/lib/cmake/protobuf"
+        "${NEXUSFLOW_UCRT64_PREFIX}/lib/cmake/protobuf"
         CACHE PATH "NexusFlow Protobuf CMake package directory"
-        FORCE
     )
 
+    set(absl_DIR
+        "${NEXUSFLOW_UCRT64_PREFIX}/lib/cmake/absl"
+        CACHE PATH "NexusFlow Abseil package directory"
+    )
+
+    find_package(absl CONFIG REQUIRED)
     find_package(Protobuf CONFIG REQUIRED)
 else()
     find_package(Protobuf REQUIRED)

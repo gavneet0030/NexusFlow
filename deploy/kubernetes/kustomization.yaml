@@ -6,7 +6,11 @@ namespace: nexusflow
 resources:
   - namespace.yaml
   - configmap.yaml
+  - secret.yaml
   - resource-quota.yaml
   - service-account.yaml
   - deployment.yaml
   - service.yaml
+  - hpa.yaml
+  - network-policy.yaml
+  - pod-disruption-budget.yaml

@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.20)
 
 # ------------------------------------------------------------
 # Platform-specific gRPC and Abseil configuration
@@ -6,18 +6,6 @@
 
 if (WIN32)
     set(NEXUSFLOW_GRPC_PLATFORM_LIBS "")
-
-    set(NEXUSFLOW_ANACONDA_LIB
-        "C:/Users/PC/anaconda3/Library/lib"
-    )
-
-    set(NEXUSFLOW_ANACONDA_BIN
-        "C:/Users/PC/anaconda3/Library/bin"
-    )
-
-    set(NEXUSFLOW_ANACONDA_ABSL_LIB
-        "${NEXUSFLOW_ANACONDA_LIB}/abseil_dll.lib"
-    )
 else()
     find_package(absl CONFIG REQUIRED)
 
@@ -57,37 +45,42 @@ set(GRPC_PROTO_HDRS
 # ------------------------------------------------------------
 
 # NexusFlow Windows dependency discovery.
-# Keep Protobuf and gRPC on the same Anaconda installation.
-# This avoids mixing Anaconda Protobuf targets with vcpkg Protobuf targets.
+# Keep Protobuf, gRPC and Abseil on the MSYS2 UCRT64 toolchain.
 
 if(WIN32)
-    set(NEXUSFLOW_ANACONDA_PREFIX "C:/Users/PC/anaconda3/Library")
+    # MSYS2 UCRT64 dependency stack.
+    # Keep Protobuf, gRPC and Abseil on the same toolchain.
+    set(NEXUSFLOW_UCRT64_PREFIX "C:/msys64/ucrt64")
 
     set(Protobuf_DIR
-        "${NEXUSFLOW_ANACONDA_PREFIX}/lib/cmake/protobuf"
+        "${NEXUSFLOW_UCRT64_PREFIX}/lib/cmake/protobuf"
         CACHE PATH "Windows Protobuf package directory"
-        FORCE
     )
 
     set(gRPC_DIR
-        "${NEXUSFLOW_ANACONDA_PREFIX}/lib/cmake/grpc"
+        "${NEXUSFLOW_UCRT64_PREFIX}/lib/cmake/grpc"
         CACHE PATH "Windows gRPC package directory"
-        FORCE
     )
 
+    set(absl_DIR
+        "${NEXUSFLOW_UCRT64_PREFIX}/lib/cmake/absl"
+        CACHE PATH "Windows Abseil package directory"
+    )
+
+    find_package(absl CONFIG REQUIRED)
     find_package(Protobuf CONFIG REQUIRED)
     find_package(gRPC CONFIG REQUIRED)
 
-    set(NEXUSFLOW_ANACONDA_LIB
-        "${NEXUSFLOW_ANACONDA_PREFIX}/lib"
+    set(NEXUSFLOW_UCRT64_BIN
+        "${NEXUSFLOW_UCRT64_PREFIX}/bin"
     )
 
-    set(NEXUSFLOW_ANACONDA_BIN
-        "${NEXUSFLOW_ANACONDA_PREFIX}/bin"
-    )
-
-    set(NEXUSFLOW_ANACONDA_ABSL_LIB
-        "${NEXUSFLOW_ANACONDA_LIB}/abseil_dll.lib"
+    set(NEXUSFLOW_GRPC_PLATFORM_LIBS
+        absl::base
+        absl::strings
+        absl::status
+        absl::statusor
+        absl::synchronization
     )
 else()
     unset(Protobuf_DIR CACHE)
@@ -127,9 +120,7 @@ endif()
 
 endif()
 
-# Abseil is required on Linux.
-# On Windows the Anaconda gRPC binaries already provide
-# the matching Abseil dependency.
+# Abseil is provided by the selected platform dependency stack.
 if (NOT WIN32)
     find_package(absl CONFIG REQUIRED)
 endif()
@@ -230,34 +221,12 @@ target_link_libraries(grpc_transport_test
 )
 
 # ------------------------------------------------------------
-# Windows Anaconda runtime staging
+# Windows UCRT64 runtime
 # ------------------------------------------------------------
-
-if (WIN32)
-    function(nexusflow_stage_grpc_runtime target_name)
-        add_custom_command(
-            TARGET ${target_name}
-            POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                "${NEXUSFLOW_ANACONDA_BIN}/abseil_dll.dll"
-                "$<TARGET_FILE_DIR:${target_name}>/abseil_dll.dll"
-            VERBATIM
-        )
-    endfunction()
-
-    nexusflow_stage_grpc_runtime(grpc_core_pipeline_test)
-    nexusflow_stage_grpc_runtime(grpc_transport_test)
-
-    target_link_libraries(grpc_core_pipeline_test
-        PRIVATE
-            ${NEXUSFLOW_ANACONDA_ABSL_LIB}
-    )
-
-    target_link_libraries(grpc_transport_test
-        PRIVATE
-            ${NEXUSFLOW_ANACONDA_ABSL_LIB}
-    )
-endif()
+#
+# gRPC/Protobuf/Abseil are provided by the MSYS2 UCRT64
+# dependency stack and are linked through their CMake targets.
+# No manual DLL staging is required.
 
 # ------------------------------------------------------------
 # CTest registration
@@ -279,7 +248,7 @@ add_test(
 
 if (WIN32)
     message(STATUS "NEXUSFLOW gRPC PLATFORM: WINDOWS")
-    message(STATUS "NEXUSFLOW gRPC RUNTIME: ANACONDA")
+    message(STATUS "NEXUSFLOW gRPC RUNTIME: MSYS2 UCRT64")
 else()
     message(STATUS "NEXUSFLOW gRPC PLATFORM: LINUX")
     message(STATUS "NEXUSFLOW gRPC RUNTIME: SYSTEM")
@@ -295,7 +264,7 @@ message(STATUS "NEXUSFLOW gRPC CMAKE: CLEAN")
 
 # NEXUSFLOW_LINUX_DEPENDENCY_SANITIZATION
 #
-# The Windows development environment contains Anaconda gRPC/Protobuf
+# The Windows development environment may contain unrelated third-party
 # include directories. Imported dependency targets can propagate those
 # directories into Linux builds through their INTERFACE_INCLUDE_DIRECTORIES.
 #
