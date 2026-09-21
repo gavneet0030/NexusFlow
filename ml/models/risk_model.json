@@ -1,0 +1,52 @@
+{
+  "model_type": "logistic_regression",
+  "feature_names": [
+    "amount",
+    "priority",
+    "is_fraud_type",
+    "is_suspicious_type",
+    "is_chargeback_type",
+    "high_value",
+    "critical_priority"
+  ],
+  "mean": [
+    1830.8117779195284,
+    1.5043125,
+    0.0801875,
+    0.1193125,
+    0.06475,
+    0.01425,
+    0.251
+  ],
+  "scale": [
+    2436.727101306434,
+    1.1163473484287003,
+    0.27158325582356413,
+    0.3241558689022323,
+    0.2460842081483112,
+    0.1185197768306952,
+    0.4335885146080291
+  ],
+  "weights": [
+    0.41732233428585336,
+    0.47480785157062194,
+    0.6963958920721804,
+    0.5551948851812916,
+    0.525655038661015,
+    0.1208524475482344,
+    0.36587952862643197
+  ],
+  "intercept": -2.167206448135296,
+  "metrics": {
+    "accuracy": 0.869,
+    "roc_auc": 0.8399581873030857,
+    "train_samples": 16000,
+    "test_samples": 4000
+  },
+  "training": {
+    "seed": 42,
+    "samples": 20000,
+    "algorithm": "LogisticRegression",
+    "standardization": true
+  }
+}

@@ -1,0 +1,58 @@
+{
+    "experiment": {
+        "name": "NexusFlow Saturation Sweep",
+        "version": "1.0",
+        "status": "validated",
+        "timestamp_utc": "2026-09-07T13:04:11.458431+00:00"
+    },
+    "workload": {
+        "dataset": "UCI Online Retail II",
+        "events_per_run": 10000,
+        "offered_rates_eps": [
+            10000,
+            15000,
+            20000,
+            25000,
+            30000,
+            35000,
+            40000,
+            45000,
+            50000
+        ],
+        "repetitions_per_rate": 3,
+        "total_runs": 27,
+        "total_events": 270000
+    },
+    "system": {
+        "scheduler": "AdaptiveScheduler",
+        "maximum_workers": 16,
+        "queue_capacity": 4096,
+        "platform": "Windows-10-10.0.19045-SP0",
+        "python_version": "3.14.2"
+    },
+    "sla": {
+        "mean_p99_latency_us": 100,
+        "mean_p999_latency_us": 1000,
+        "minimum_throughput_efficiency_percent": 80,
+        "maximum_throughput_cv_percent": 5
+    },
+    "validated_results": {
+        "integrity_pass_rate_percent": 100,
+        "recommended_operating_point_eps": 30000,
+        "estimated_saturation_knee_eps": 20000,
+        "maximum_mean_throughput_eps": 32759.22,
+        "maximum_throughput_offered_load_eps": 45000,
+        "efficiency_degradation_begins_eps": 35000,
+        "stability_degradation_begins_eps": 20000
+    },
+    "artifacts": {
+        "raw_results": "benchmarks\\results\\saturation_sweep_raw.csv",
+        "capacity_summary": "benchmarks\\results\\saturation_analysis\\capacity_summary.csv",
+        "capacity_report": "benchmarks\\results\\saturation_analysis\\capacity_decision.md"
+    },
+    "sha256": {
+        "raw_results": "0e11acc6c448dda2e4b62b9f026687b0b2ed65e85b2861f82dccb08eac1f8388",
+        "capacity_summary": "c59258130ad57d040132e1e633d64e264ea306ffa3ce74e40e4ee9349ac0c452",
+        "capacity_report": "25a4088d08e4febeac7cf460802a06986e4dc959aec07ba5518bc411d7b40dab"
+    }
+}

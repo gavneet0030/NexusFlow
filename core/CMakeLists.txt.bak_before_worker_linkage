@@ -1,0 +1,11 @@
+add_library(nexusflow_core INTERFACE)
+
+target_include_directories(nexusflow_core
+    INTERFACE
+        ${CMAKE_CURRENT_SOURCE_DIR}/event
+        ${CMAKE_CURRENT_SOURCE_DIR}/queue
+        ${CMAKE_CURRENT_SOURCE_DIR}/scheduler
+        ${CMAKE_CURRENT_SOURCE_DIR}/workers
+        ${CMAKE_CURRENT_SOURCE_DIR}/processor
+        ${CMAKE_CURRENT_SOURCE_DIR}/memory
+)

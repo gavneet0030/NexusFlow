@@ -1,0 +1,2 @@
+micro_batch_size,mean_throughput_eps,max_throughput_eps,mean_latency_us,min_latency_us,configurations
+30000,165.21109375,476.311,9808.7859375,376.6,64

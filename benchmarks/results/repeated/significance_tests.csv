@@ -1,0 +1,4 @@
+comparison,runs,mean_difference_eps,median_difference_eps,adaptive_wins,adaptive_losses,ties,wilcoxon_statistic,p_value_one_sided,alpha,statistically_significant
+ADAPTIVE_vs_FIXED_SINGLE,10,14195.85,13812.75,10,0,0,55.0,0.0009765625,0.05,True
+ADAPTIVE_vs_FIXED_BATCH_32,10,1744.860000000002,3309.4500000000007,6,4,0,35.0,0.24609375,0.05,False
+ADAPTIVE_vs_FIXED_PARALLEL_8,10,2009.6400000000006,3078.3999999999996,7,3,0,38.0,0.1611328125,0.05,False

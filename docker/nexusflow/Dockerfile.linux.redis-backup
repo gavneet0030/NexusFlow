@@ -1,0 +1,80 @@
+﻿FROM ubuntu:24.04 AS builder
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y \
+        build-essential \
+        cmake \
+        ninja-build \
+        git \
+        pkg-config \
+        libssl-dev \
+        protobuf-compiler \
+        libprotobuf-dev \
+        protobuf-compiler-grpc \
+        libgrpc++-dev \
+        libre2-dev \
+        libabsl-dev \
+        librdkafka-dev \
+        libhiredis-dev \
+        libpq-dev \
+        && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /src
+
+COPY . .
+
+RUN cmake -S . -B build-linux \
+    -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DNEXUSFLOW_BUILD_TESTS=OFF
+
+RUN protoc --version && \
+    grpc_cpp_plugin --version || true
+
+RUN mkdir -p api/grpc/generated && \
+    protoc \
+        -I api/grpc \
+        --cpp_out=api/grpc/generated \
+        api/grpc/nexusflow.proto && \
+    protoc \
+        -I api/grpc \
+        --cpp_out=api/grpc/generated \
+        --grpc_out=api/grpc/generated \
+        --plugin=protoc-gen-grpc=/usr/bin/grpc_cpp_plugin \
+        api/grpc/nexusflow.proto
+
+RUN cmake --build build-linux --parallel
+
+
+FROM ubuntu:24.04 AS runtime
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y \
+        ca-certificates \
+        libstdc++6 \
+        libprotobuf-dev \
+        libgrpc++-dev \
+        libabsl-dev \
+        librdkafka1 \
+        libhiredis-dev \
+        libpq5 \
+        && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY --from=builder /src/build-linux/app/nexusflow /app/nexusflow
+
+RUN useradd --create-home --shell /usr/sbin/nologin nexusflow && \
+    chown -R nexusflow:nexusflow /app
+
+USER nexusflow
+
+EXPOSE 9100
+
+ENTRYPOINT ["/app/nexusflow"]
+
+

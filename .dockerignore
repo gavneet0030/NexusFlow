@@ -1,0 +1,15 @@
+﻿.git
+.github
+.vscode
+build
+build-*
+.venv
+__pycache__
+*.pyc
+logs
+data/raw
+data/processed
+benchmarks/results
+*.obj
+*.pdb
+*.ilk

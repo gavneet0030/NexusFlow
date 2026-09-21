@@ -1,0 +1,15 @@
+artifact,path,status
+Raw benchmark data,benchmarks\results\comparative_scheduler\comparative_raw.csv,COMPLETE
+Aggregate summary,benchmarks\results\comparative_scheduler\analysis\summary.csv,COMPLETE
+Best mode comparison,benchmarks\results\comparative_scheduler\analysis\comparison.csv,COMPLETE
+Adaptive vs fixed,benchmarks\results\comparative_scheduler\analysis\adaptive_vs_best_baseline.csv,COMPLETE
+Throughput significance,benchmarks\results\comparative_scheduler\analysis\wilcoxon_throughput.csv,COMPLETE
+P99 significance,benchmarks\results\comparative_scheduler\analysis\wilcoxon_p99.csv,COMPLETE
+P99.9 significance,benchmarks\results\comparative_scheduler\analysis\wilcoxon_p999.csv,COMPLETE
+Research report,benchmarks\results\comparative_scheduler\analysis\COMPARATIVE_RESEARCH_REPORT.md,COMPLETE
+Statistical report,benchmarks\results\comparative_scheduler\analysis\STATISTICAL_SIGNIFICANCE_REPORT.md,COMPLETE
+Throughput visualization,benchmarks\results\comparative_scheduler\analysis\throughput_comparison.png,COMPLETE
+P99 visualization,benchmarks\results\comparative_scheduler\analysis\p99_comparison.png,COMPLETE
+P99.9 visualization,benchmarks\results\comparative_scheduler\analysis\p999_comparison.png,COMPLETE
+Efficiency visualization,benchmarks\results\comparative_scheduler\analysis\efficiency_comparison.png,COMPLETE
+Worker scaling visualization,benchmarks\results\comparative_scheduler\analysis\worker_scaling_comparison.png,COMPLETE

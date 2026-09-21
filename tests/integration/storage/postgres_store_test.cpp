@@ -1,0 +1,94 @@
+﻿#include "storage/postgres/postgres_store.hpp"
+#include "core/event/event.hpp"
+
+#include <cstdint>
+#include <iostream>
+#include <string>
+
+int main() {
+    std::cout << "POSTGRES NATIVE INTEGRATION TEST" << std::endl;
+
+    nexusflow::storage::PostgresStore store;
+
+    std::cout << "=== CONNECT ===" << std::endl;
+
+    if (!store.connect()) {
+        std::cerr << "POSTGRES CONNECTION: FAIL" << std::endl;
+        return 1;
+    }
+
+    std::cout << "POSTGRES CONNECTION: PASS" << std::endl;
+
+    std::cout << "=== CREATE SCHEMA ===" << std::endl;
+
+    if (!store.create_schema()) {
+        std::cerr << "POSTGRES SCHEMA: FAIL" << std::endl;
+        return 1;
+    }
+
+    std::cout << "POSTGRES SCHEMA: PASS" << std::endl;
+
+    nexusflow::Event event{};
+
+    event.id = 9000001;
+    event.timestamp_ns = 1735689600000000000ULL;
+    event.priority = nexusflow::EventPriority::HIGH;
+    event.value = 123.456;
+    event.source = "postgres-integration-test";
+    event.type = "transaction";
+
+    std::cout << "=== INSERT EVENT ===" << std::endl;
+
+    if (!store.insert_event(event)) {
+        std::cerr << "POSTGRES INSERT: FAIL" << std::endl;
+        return 1;
+    }
+
+    std::cout << "POSTGRES INSERT: PASS" << std::endl;
+
+    std::cout
+        << "INSERTED EVENTS: "
+        << store.inserted_events()
+        << std::endl;
+
+    if (store.inserted_events() != 1) {
+        std::cerr << "POSTGRES INSERT COUNT: FAIL" << std::endl;
+        return 1;
+    }
+
+    std::cout << "POSTGRES INSERT COUNT: PASS" << std::endl;
+
+    // Verify duplicate protection.
+    if (!store.insert_event(event)) {
+        std::cerr << "POSTGRES DUPLICATE CHECK: FAIL" << std::endl;
+        return 1;
+    }
+
+    if (store.inserted_events() != 1) {
+        std::cerr << "POSTGRES DUPLICATE PROTECTION: FAIL"
+                  << std::endl;
+        return 1;
+    }
+
+    std::cout << "POSTGRES DUPLICATE PROTECTION: PASS"
+              << std::endl;
+
+    store.disconnect();
+
+    if (store.connected()) {
+        std::cerr << "POSTGRES DISCONNECT: FAIL" << std::endl;
+        return 1;
+    }
+
+    std::cout << "POSTGRES DISCONNECT: PASS" << std::endl;
+
+    std::cout << "============================================"
+              << std::endl;
+    std::cout << "NATIVE POSTGRES INTEGRATION TEST: PASS"
+              << std::endl;
+    std::cout << "============================================"
+              << std::endl;
+
+    return 0;
+}
+

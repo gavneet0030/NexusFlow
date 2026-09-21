@@ -1,0 +1,34 @@
+add_library(nexusflow_redis
+    redis_store.cpp
+)
+
+target_include_directories(nexusflow_redis
+    PUBLIC
+        ${CMAKE_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}
+    PRIVATE
+        "C:/vcpkg/installed/x64-windows/include"
+)
+
+target_link_libraries(nexusflow_redis
+    PUBLIC
+        "C:/vcpkg/installed/x64-windows/lib/redis++.lib"
+        "C:/vcpkg/installed/x64-windows/lib/hiredis.lib"
+        ws2_32
+        crypt32
+)
+
+add_executable(redis_store_test
+    ${CMAKE_SOURCE_DIR}/tests/integration/storage/redis_store_test.cpp
+)
+
+target_include_directories(redis_store_test
+    PRIVATE
+        ${CMAKE_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/storage/redis
+)
+
+target_link_libraries(redis_store_test
+    PRIVATE
+        nexusflow_redis
+)

@@ -1,0 +1,10 @@
+^C:\USERS\PC\NEXUSFLOW\OBSERVABILITY\RUNTIME\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/PC/NexusFlow -BC:/Users/PC/NexusFlow/build_runtime_observability --check-stamp-file C:/Users/PC/NexusFlow/build_runtime_observability/observability/runtime/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

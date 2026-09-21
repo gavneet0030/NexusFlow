@@ -1,0 +1,43 @@
+﻿#pragma once
+
+#include <cstdint>
+#include <string>
+
+namespace nexusflow {
+
+class PostgresStore {
+public:
+    PostgresStore();
+    ~PostgresStore();
+
+    PostgresStore(const PostgresStore&) = delete;
+    PostgresStore& operator=(const PostgresStore&) = delete;
+
+    bool connect(
+        const std::string& host = "127.0.0.1",
+        std::uint16_t port = 5432,
+        const std::string& database = "postgres",
+        const std::string& user = "postgres",
+        const std::string& password = "postgres"
+    );
+
+    void disconnect();
+
+    bool is_connected() const;
+
+    bool create_schema();
+
+    bool insert_event(
+        std::uint64_t event_id,
+        std::int64_t timestamp_ns,
+        const std::string& source,
+        const std::string& event_type,
+        int value
+    );
+
+private:
+    struct Impl;
+    Impl* impl_;
+};
+
+}

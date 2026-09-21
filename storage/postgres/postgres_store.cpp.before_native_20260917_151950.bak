@@ -1,0 +1,112 @@
+﻿#include "postgres_store.hpp"
+
+#include <cstdlib>
+#include <string>
+
+namespace nexusflow {
+
+struct PostgresStore::Impl {
+    std::string host;
+    std::uint16_t port = 5432;
+    std::string database;
+    std::string user;
+    std::string password;
+    bool connected = false;
+};
+
+PostgresStore::PostgresStore()
+    : impl_(new Impl()) {
+}
+
+PostgresStore::~PostgresStore() {
+    disconnect();
+    delete impl_;
+}
+
+bool PostgresStore::connect(
+    const std::string& host,
+    std::uint16_t port,
+    const std::string& database,
+    const std::string& user,
+    const std::string& password
+) {
+    impl_->host = host;
+    impl_->port = port;
+    impl_->database = database;
+    impl_->user = user;
+    impl_->password = password;
+
+    const std::string command =
+        "docker exec frip-postgres "
+        "pg_isready "
+        "-h " + host +
+        " -p " + std::to_string(port) +
+        " -U " + user +
+        " -d " + database +
+        " >NUL 2>&1";
+
+    const int result = std::system(command.c_str());
+
+    impl_->connected = (result == 0);
+
+    return impl_->connected;
+}
+
+void PostgresStore::disconnect() {
+    impl_->connected = false;
+}
+
+bool PostgresStore::is_connected() const {
+    return impl_->connected;
+}
+
+bool PostgresStore::create_schema() {
+    if (!impl_->connected) {
+        return false;
+    }
+
+    const std::string command =
+        "docker exec frip-postgres "
+        "psql -U " + impl_->user +
+        " -d " + impl_->database +
+        " -c \"CREATE TABLE IF NOT EXISTS nexusflow_events "
+        "(event_id BIGINT PRIMARY KEY, "
+        "timestamp_ns BIGINT NOT NULL, "
+        "source TEXT NOT NULL, "
+        "event_type TEXT NOT NULL, "
+        "value INTEGER NOT NULL);\" "
+        ">NUL 2>&1";
+
+    return std::system(command.c_str()) == 0;
+}
+
+bool PostgresStore::insert_event(
+    std::uint64_t event_id,
+    std::int64_t timestamp_ns,
+    const std::string& source,
+    const std::string& event_type,
+    int value
+) {
+    if (!impl_->connected) {
+        return false;
+    }
+
+    const std::string command =
+        "docker exec frip-postgres "
+        "psql -U " + impl_->user +
+        " -d " + impl_->database +
+        " -c \"INSERT INTO nexusflow_events "
+        "(event_id, timestamp_ns, source, event_type, value) "
+        "VALUES (" +
+        std::to_string(event_id) + ", " +
+        std::to_string(timestamp_ns) + ", '" +
+        source + "', '" +
+        event_type + "', " +
+        std::to_string(value) +
+        ") ON CONFLICT (event_id) DO NOTHING;\" "
+        ">NUL 2>&1";
+
+    return std::system(command.c_str()) == 0;
+}
+
+}

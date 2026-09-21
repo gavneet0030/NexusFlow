@@ -1,0 +1,13 @@
+﻿apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nexusflow-config
+  namespace: nexusflow
+data:
+  NEXUSFLOW_ENV: "kubernetes"
+  NEXUSFLOW_LOG_LEVEL: "info"
+  NEXUSFLOW_WORKERS: "4"
+  NEXUSFLOW_QUEUE_CAPACITY: "100000"
+  NEXUSFLOW_SCHEDULER_MODE: "adaptive"
+  NEXUSFLOW_METRICS_ENABLED: "true"
+  NEXUSFLOW_TRACING_ENABLED: "true"

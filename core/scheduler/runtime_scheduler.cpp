@@ -1,0 +1,349 @@
+#include "core/scheduler/runtime_scheduler.hpp"
+
+#include <algorithm>
+#include <chrono>
+#include <cmath>
+#include <numeric>
+
+namespace nexusflow {
+
+namespace {
+
+SchedulerV2Config make_scheduler_v2_config(
+    const SchedulerConfig& config,
+    std::size_t max_workers)
+{
+    SchedulerV2Config v2;
+
+    v2.soft_queue_limit =
+        config.soft_queue_limit;
+
+    v2.hard_queue_limit =
+        config.hard_queue_limit;
+
+    v2.low_queue_threshold =
+        config.low_queue_threshold;
+
+    v2.worker_queue_threshold =
+        config.worker_queue_threshold;
+
+    v2.high_worker_queue_threshold =
+        config.high_worker_queue_threshold;
+
+    v2.extreme_worker_queue_threshold =
+        config.extreme_worker_queue_threshold;
+
+    v2.low_arrival_rate_eps =
+        config.low_arrival_rate_eps;
+
+    v2.moderate_arrival_rate_eps =
+        config.moderate_arrival_rate_eps;
+
+    v2.latency_critical_sla_us =
+        config.latency_critical_sla_us;
+
+    v2.tail_guard_sla_us =
+        config.tail_guard_sla_us;
+
+    v2.tail_guard_queue_threshold =
+        config.tail_guard_queue_threshold;
+
+    v2.high_priority_batch_size =
+        config.high_priority_batch_size;
+
+    v2.micro_batch_size =
+        config.micro_batch_size;
+
+    v2.parallel_batch_size =
+        config.parallel_batch_size;
+
+    v2.critical_min_workers =
+        config.critical_min_workers;
+
+    v2.high_priority_min_workers =
+        config.high_priority_min_workers;
+
+    v2.latency_critical_min_workers =
+        config.latency_critical_min_workers;
+
+    v2.maximum_workers =
+        std::max(
+            static_cast<std::size_t>(1),
+            max_workers);
+
+    return v2;
+}
+
+}
+
+RuntimeScheduler::RuntimeScheduler(
+    std::size_t max_workers)
+    : RuntimeScheduler(
+        max_workers,
+        SchedulerConfig{})
+{
+}
+
+RuntimeScheduler::RuntimeScheduler(
+    std::size_t max_workers,
+    const SchedulerConfig& scheduler_config)
+    : max_workers_(
+        std::max(
+            static_cast<std::size_t>(1),
+            max_workers)),
+      scheduler_config_(
+          scheduler_config),
+      scheduler_v2_(
+          make_scheduler_v2_config(
+              scheduler_config_,
+              max_workers_)),
+      measurement_start_(
+          std::chrono::steady_clock::now()),
+      arrival_window_start_(
+          measurement_start_)
+{
+}
+
+SchedulingDecision RuntimeScheduler::decide(
+    const SchedulerMetrics& metrics) const
+{
+    SchedulerMetrics runtime_metrics =
+        metrics;
+
+    runtime_metrics.recent_p99_latency_us =
+        static_cast<std::uint64_t>(
+            std::max(
+                0.0,
+                calculate_recent_p99_latency_us()));
+
+    SchedulingDecision decision =
+        scheduler_v2_.decide(
+            runtime_metrics);
+
+    decision.target_workers =
+        std::min(
+            decision.target_workers,
+            max_workers_);
+
+    if (decision.target_workers == 0) {
+        decision.target_workers = 1;
+    }
+
+    return decision;
+}
+
+SchedulingDecision RuntimeScheduler::decide(
+    std::uint64_t queue_depth) const
+{
+    SchedulerMetrics current =
+        metrics();
+
+    current.queue_depth =
+        static_cast<std::size_t>(
+            queue_depth);
+
+    return decide(current);
+}
+
+SchedulingDecision RuntimeScheduler::decide() const
+{
+    return decide(metrics());
+}
+
+void RuntimeScheduler::record_arrival()
+{
+    total_arrivals_.fetch_add(
+        1,
+        std::memory_order_relaxed);
+
+    window_arrivals_.fetch_add(
+        1,
+        std::memory_order_relaxed);
+}
+
+void RuntimeScheduler::on_event_arrival()
+{
+    record_arrival();
+}
+
+void RuntimeScheduler::on_event_processed(
+    std::uint64_t latency_us)
+{
+    total_processed_.fetch_add(
+        1,
+        std::memory_order_relaxed);
+
+    total_latency_us_.fetch_add(
+        latency_us,
+        std::memory_order_relaxed);
+
+    std::lock_guard<std::mutex> lock(
+        measurement_mutex_);
+
+    recent_latency_samples_us_.push_back(
+        latency_us);
+
+    if (recent_latency_samples_us_.size() >
+        max_recent_latency_samples_) {
+
+        const std::size_t excess =
+            recent_latency_samples_us_.size() -
+            max_recent_latency_samples_;
+
+        recent_latency_samples_us_.erase(
+            recent_latency_samples_us_.begin(),
+            recent_latency_samples_us_.begin() +
+                static_cast<std::ptrdiff_t>(excess));
+    }
+}
+
+void RuntimeScheduler::update_queue_depth(
+    std::size_t queue_depth)
+{
+    current_queue_depth_.store(
+        queue_depth,
+        std::memory_order_relaxed);
+}
+
+void RuntimeScheduler::set_sla_budget_us(
+    std::uint64_t sla_budget_us)
+{
+    sla_budget_us_.store(
+        sla_budget_us,
+        std::memory_order_relaxed);
+}
+
+void RuntimeScheduler::set_scheduler_config(
+    const SchedulerConfig& config)
+{
+    std::lock_guard<std::mutex> lock(
+        measurement_mutex_);
+
+    scheduler_config_ =
+        config;
+
+    scheduler_v2_.set_config(
+        make_scheduler_v2_config(
+            scheduler_config_,
+            max_workers_));
+}
+
+const SchedulerConfig&
+RuntimeScheduler::scheduler_config() const
+{
+    return scheduler_config_;
+}
+
+double RuntimeScheduler::estimate_arrival_rate() const
+{
+    const auto now =
+        std::chrono::steady_clock::now();
+
+    std::lock_guard<std::mutex> lock(
+        measurement_mutex_);
+
+    const std::uint64_t current_count =
+        window_arrivals_.load(
+            std::memory_order_relaxed);
+
+    const auto elapsed =
+        std::chrono::duration_cast<
+            std::chrono::duration<double>>(
+                now - last_arrival_sample_time_);
+
+    const double seconds =
+        elapsed.count();
+
+    if (seconds < 0.001) {
+        return last_arrival_rate_eps_;
+    }
+
+    const std::uint64_t delta =
+        current_count - last_arrival_sample_count_;
+
+    const double rate =
+        static_cast<double>(delta) / seconds;
+
+    last_arrival_sample_count_ = current_count;
+    last_arrival_sample_time_ = now;
+    last_arrival_rate_eps_ = rate;
+
+    return rate;
+}
+
+double RuntimeScheduler::calculate_recent_p99_latency_us() const
+{
+    std::lock_guard<std::mutex> lock(
+        measurement_mutex_);
+
+    if (recent_latency_samples_us_.empty()) {
+        return 0.0;
+    }
+
+    std::vector<std::uint64_t> samples =
+        recent_latency_samples_us_;
+
+    std::sort(
+        samples.begin(),
+        samples.end());
+
+    const double index =
+        0.999 *
+        static_cast<double>(
+            samples.size() - 1);
+
+    const std::size_t lower =
+        static_cast<std::size_t>(
+            std::floor(index));
+
+    const std::size_t upper =
+        static_cast<std::size_t>(
+            std::ceil(index));
+
+    if (lower == upper) {
+        return static_cast<double>(
+            samples[lower]);
+    }
+
+    const double fraction =
+        index -
+        static_cast<double>(lower);
+
+    return
+        static_cast<double>(
+            samples[lower]) *
+            (1.0 - fraction)
+        +
+        static_cast<double>(
+            samples[upper]) *
+            fraction;
+}
+
+SchedulerMetrics RuntimeScheduler::metrics() const
+{
+    SchedulerMetrics result;
+
+    result.arrival_rate_eps =
+        estimate_arrival_rate();
+
+    result.queue_depth =
+        current_queue_depth_.load(
+            std::memory_order_relaxed);
+
+    result.cpu_utilization =
+        0.0;
+
+    result.remaining_sla_us =
+        sla_budget_us_.load(
+            std::memory_order_relaxed);
+
+    result.recent_p99_latency_us =
+        static_cast<std::uint64_t>(
+            std::max(
+                0.0,
+                calculate_recent_p99_latency_us()));
+
+    return result;
+}
+
+}

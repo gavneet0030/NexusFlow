@@ -1,0 +1,71 @@
+﻿# =========================
+# CMake / Build
+# =========================
+build/
+build-*/
+cmake-build-*/
+out/
+bin/
+obj/
+
+# =========================
+# Visual Studio
+# =========================
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# =========================
+# CMake Generated
+# =========================
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
+Makefile
+
+# =========================
+# Compiled / Binary Files
+# =========================
+*.exe
+*.dll
+*.so
+*.a
+*.lib
+*.obj
+*.o
+*.pdb
+*.ilk
+
+# =========================
+# Logs / Temporary
+# =========================
+*.log
+*.tmp
+*.temp
+
+# =========================
+# OS
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+ENV/
+env/
+
+# =========================
+# IDE
+# =========================
+.idea/
+.vscode/
+

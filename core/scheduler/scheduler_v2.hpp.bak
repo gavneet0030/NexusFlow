@@ -1,0 +1,102 @@
+#pragma once
+
+#include "core/scheduler/scheduler.hpp"
+
+#include <cstddef>
+#include <cstdint>
+
+namespace nexusflow {
+
+struct SchedulerV2Config {
+
+    std::size_t soft_queue_limit{256};
+    std::size_t hard_queue_limit{2048};
+
+    std::size_t low_queue_threshold{8};
+    std::size_t worker_queue_threshold{32};
+    std::size_t high_worker_queue_threshold{128};
+    std::size_t extreme_worker_queue_threshold{512};
+
+    double low_arrival_rate_eps{1000.0};
+    double moderate_arrival_rate_eps{5000.0};
+
+    std::uint64_t latency_critical_sla_us{1000};
+    std::uint64_t tail_guard_sla_us{250};
+    std::size_t tail_guard_queue_threshold{32};
+
+    std::size_t high_priority_batch_size{4};
+    std::size_t micro_batch_size{32};
+    std::size_t parallel_batch_size{64};
+
+    std::size_t critical_min_workers{4};
+    std::size_t high_priority_min_workers{2};
+    std::size_t latency_critical_min_workers{2};
+
+    double arrival_rate_ema_alpha{0.25};
+    double queue_growth_ema_alpha{0.25};
+    double latency_ema_alpha{0.25};
+
+    double scale_up_queue_growth_threshold{8.0};
+    double scale_down_queue_growth_threshold{-4.0};
+
+    std::uint64_t scale_up_cooldown_us{5000};
+    std::uint64_t scale_down_cooldown_us{20000};
+
+    std::size_t minimum_worker_residency{2};
+    std::size_t maximum_workers{16};
+
+    double worker_utilization_scale_up{0.75};
+    double worker_utilization_scale_down{0.25};
+
+    double low_load_scale_down_threshold{2000.0};
+    std::size_t low_queue_scale_down_threshold{16};
+    std::uint64_t low_load_scale_down_latency_us{500};
+
+    std::uint64_t recent_p99_latency_us{0};
+};
+
+struct SchedulerV2State {
+
+    double arrival_rate_ema_eps{0.0};
+    double queue_growth_ema{0.0};
+    double latency_ema_us{0.0};
+    double queue_depth_ema{0.0};
+
+    std::size_t current_workers{1};
+
+    std::size_t decisions_since_scale{0};
+
+    std::uint64_t last_scale_time_us{0};
+
+    bool initialized{false};
+};
+
+class SchedulerV2 final : public Scheduler {
+
+public:
+
+    SchedulerV2() = default;
+
+    explicit SchedulerV2(
+        const SchedulerV2Config& config);
+
+    SchedulingDecision decide(
+        const SchedulerMetrics& metrics) const override;
+
+    void set_config(
+        const SchedulerV2Config& config);
+
+    const SchedulerV2Config& config() const {
+        return config_;
+    }
+
+private:
+
+    static std::uint64_t now_us();
+
+    SchedulerV2Config config_{};
+
+    mutable SchedulerV2State state_{};
+};
+
+}

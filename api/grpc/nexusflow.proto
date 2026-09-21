@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package nexusflow.grpc;
+
+message EventRequest {
+    uint64 event_id = 1;
+    uint64 timestamp_ms = 2;
+    uint32 type = 3;
+    string payload = 4;
+}
+
+message EventResponse {
+    bool accepted = 1;
+    string message = 2;
+}
+
+message HealthRequest {}
+
+message HealthResponse {
+    bool healthy = 1;
+    uint64 processed_events = 2;
+}
+
+service NexusFlowService {
+    rpc SubmitEvent(EventRequest) returns (EventResponse);
+    rpc Health(HealthRequest) returns (HealthResponse);
+}

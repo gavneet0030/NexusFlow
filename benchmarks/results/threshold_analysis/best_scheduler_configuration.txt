@@ -1,0 +1,9 @@
+NexusFlow Best Scheduler Configuration Candidate
+================================================
+Rank: 1
+Case ID: 9
+Micro-batch size: 8
+SLA budget: 2000 us
+Soft queue limit: 16
+Mode coverage: 3/3
+Selection score: 112.00

@@ -1,0 +1,6 @@
+scenario,queue_depth,arrival_rate_eps,cpu_utilization,remaining_sla_us,mode,batch_size,target_workers,sla_bypass,throughput_eps,avg_latency_us,p99_latency_us
+LOW,4,500,0.2,1000000,SINGLE,1,1,false,89357.8,10.9498,17.602
+MEDIUM,128,5000,0.5,1000000,PARALLEL,64,4,false,109953,8.80555,24.4
+HIGH,1024,20000,0.8,1000000,PARALLEL,64,8,false,106979,8.99409,26.701
+OVERLOAD,4096,50000,0.95,1000000,PARALLEL,64,16,false,111125,8.69448,12.9
+SLA_PRESSURE,512,20000,0.8,300,SINGLE,1,4,true,92586,10.5415,15.3

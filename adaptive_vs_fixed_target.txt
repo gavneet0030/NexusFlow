@@ -1,0 +1,11 @@
+add_executable(adaptive_vs_fixed_benchmark
+    benchmarks/adaptive_vs_fixed_benchmark.cpp
+    core/processor/adaptive_execution_engine.cpp
+    core/processor/event_processor.cpp
+    core/processor/batch_processor.cpp
+    core/scheduler/adaptive_scheduler.cpp
+)
+
+target_include_directories(adaptive_vs_fixed_benchmark PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)

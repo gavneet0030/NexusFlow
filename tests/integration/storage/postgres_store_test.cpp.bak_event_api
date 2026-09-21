@@ -1,0 +1,60 @@
+#include <chrono>
+#include <cstdint>
+#include <iostream>
+
+#include "core/event/event.hpp"
+#include "storage/postgres/postgres_store.hpp"
+
+int main() {
+    using nexusflow::Event;
+    using nexusflow::EventType;
+    using nexusflow::storage::PostgresStore;
+
+    PostgresStore store;
+
+    if (!store.connect()) {
+        std::cout << "POSTGRES NATIVE INTEGRATION: FAIL\n";
+        return 1;
+    }
+
+    if (!store.create_schema()) {
+        std::cout << "POSTGRES SCHEMA: FAIL\n";
+        return 1;
+    }
+
+    const auto now =
+        std::chrono::duration_cast<
+            std::chrono::milliseconds
+        >(
+            std::chrono::system_clock::now().time_since_epoch()
+        ).count();
+
+    constexpr std::uint64_t event_id = 900000001ULL;
+
+    Event event(
+        event_id,
+        static_cast<std::uint64_t>(now),
+        EventType::Generic,
+        "native-postgres-test"
+    );
+
+    if (!store.insert_event(event)) {
+        std::cout << "POSTGRES INSERT: FAIL\n";
+        return 1;
+    }
+
+    std::cout
+        << "INSERTED EVENTS: "
+        << store.inserted_events()
+        << "\n";
+
+    if (store.inserted_events() != 1) {
+        std::cout << "POSTGRES INSERT COUNT: FAIL\n";
+        return 1;
+    }
+
+    std::cout
+        << "POSTGRES NATIVE INTEGRATION: PASS\n";
+
+    return 0;
+}

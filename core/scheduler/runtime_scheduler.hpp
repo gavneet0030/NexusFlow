@@ -1,0 +1,109 @@
+#pragma once
+
+#include "core/scheduler/adaptive_scheduler.hpp"
+#include "core/scheduler/scheduler_v2.hpp"
+
+#include <atomic>
+#include <chrono>
+#include <cstddef>
+#include <cstdint>
+#include <mutex>
+#include <vector>
+
+namespace nexusflow {
+
+class RuntimeScheduler {
+
+public:
+
+    RuntimeScheduler() = default;
+
+    explicit RuntimeScheduler(
+        std::size_t max_workers);
+
+    RuntimeScheduler(
+        std::size_t max_workers,
+        const SchedulerConfig& scheduler_config);
+
+    SchedulingDecision decide(
+        const SchedulerMetrics& metrics) const;
+
+    SchedulingDecision decide(
+        std::uint64_t queue_depth) const;
+
+    SchedulingDecision decide() const;
+
+    void record_arrival();
+
+    void on_event_arrival();
+
+    void on_event_processed(
+        std::uint64_t latency_us);
+
+    void update_queue_depth(
+        std::size_t queue_depth);
+
+    void set_sla_budget_us(
+        std::uint64_t sla_budget_us);
+
+    void set_scheduler_config(
+        const SchedulerConfig& config);
+
+    const SchedulerConfig& scheduler_config() const;
+
+    SchedulerMetrics metrics() const;
+
+private:
+
+    double estimate_arrival_rate() const;
+
+    double calculate_recent_p99_latency_us() const;
+
+    std::atomic<std::uint64_t>
+        total_arrivals_{0};
+
+    std::atomic<std::uint64_t>
+        total_processed_{0};
+
+    std::atomic<std::uint64_t>
+        total_latency_us_{0};
+
+    std::atomic<std::uint64_t>
+        window_arrivals_{0};
+
+    std::atomic<std::size_t>
+        current_queue_depth_{0};
+
+    std::atomic<std::uint64_t>
+        sla_budget_us_{5000};
+
+    std::size_t max_workers_{1};
+
+    SchedulerConfig scheduler_config_{};
+
+    mutable SchedulerV2 scheduler_v2_;
+
+    mutable std::mutex measurement_mutex_;
+
+    std::chrono::steady_clock::time_point
+        measurement_start_{
+            std::chrono::steady_clock::now()
+        };
+
+    std::chrono::steady_clock::time_point
+        arrival_window_start_{
+            std::chrono::steady_clock::now()
+        };
+    mutable std::uint64_t last_arrival_sample_count_{0};
+    mutable std::chrono::steady_clock::time_point last_arrival_sample_time_{
+        std::chrono::steady_clock::now()};
+    mutable double last_arrival_rate_eps_{0.0};
+
+    mutable std::vector<std::uint64_t>
+        recent_latency_samples_us_;
+
+    std::size_t
+        max_recent_latency_samples_{2048};
+};
+
+}

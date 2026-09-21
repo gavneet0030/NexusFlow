@@ -1,0 +1,117 @@
+
+============================================================
+        NEXUSFLOW WORKER SCALING BENCHMARK
+============================================================
+Events per run : 100000
+Configurations : 1, 2, 4, 8, 16 workers
+============================================================
+
+------------------------------------------------------------
+Running benchmark with 1 worker(s)...
+------------------------------------------------------------
+Workers       : 1
+Events        : 100000
+Time          : 0.541 sec
+Throughput    : 184690.160 events/sec
+Average       : 32606.209 us
+P50           : 16646.047 us
+P95           : 98131.923 us
+P99           : 109857.297 us
+P99.9         : 164192.023 us
+Max           : 164210.243 us
+Checksum      : 4999912.756
+
+------------------------------------------------------------
+Running benchmark with 2 worker(s)...
+------------------------------------------------------------
+Workers       : 2
+Events        : 100000
+Time          : 0.677 sec
+Throughput    : 147807.705 events/sec
+Average       : 39131.277 us
+P50           : 11892.408 us
+P95           : 134208.545 us
+P99           : 155650.930 us
+P99.9         : 155748.539 us
+Max           : 204488.184 us
+Checksum      : 4999912.756
+
+------------------------------------------------------------
+Running benchmark with 4 worker(s)...
+------------------------------------------------------------
+Workers       : 4
+Events        : 100000
+Time          : 1.092 sec
+Throughput    : 91573.828 events/sec
+Average       : 32059.570 us
+P50           : 10420.405 us
+P95           : 124552.214 us
+P99           : 141049.332 us
+P99.9         : 141161.555 us
+Max           : 223027.107 us
+Checksum      : 4999912.756
+
+------------------------------------------------------------
+Running benchmark with 8 worker(s)...
+------------------------------------------------------------
+Workers       : 8
+Events        : 100000
+Time          : 0.814 sec
+Throughput    : 122833.838 events/sec
+Average       : 20686.090 us
+P50           : 16086.769 us
+P95           : 60525.398 us
+P99           : 72628.779 us
+P99.9         : 73064.667 us
+Max           : 202886.085 us
+Checksum      : 4999912.756
+
+------------------------------------------------------------
+Running benchmark with 16 worker(s)...
+------------------------------------------------------------
+Workers       : 16
+Events        : 100000
+Time          : 1.528 sec
+Throughput    : 65450.064 events/sec
+Average       : 31826.689 us
+P50           : 18463.719 us
+P95           : 148010.602 us
+P99           : 159062.757 us
+P99.9         : 169201.690 us
+Max           : 279697.374 us
+Checksum      : 4999912.756
+
+============================================================
+                 SCALING SUMMARY
+============================================================
+Workers   Throughput          P50(us)        P95(us)        P99(us)        
+------------------------------------------------------------
+1         184690.16           16646.05       98131.92       109857.30      
+2         147807.70           11892.41       134208.55      155650.93      
+4         91573.83            10420.40       124552.21      141049.33      
+8         122833.84           16086.77       60525.40       72628.78       
+16        65450.06            18463.72       148010.60      159062.76      
+
+Results saved to:
+benchmarks/results/worker_scaling.csv
+
+STATUS: SCALING BENCHMARK COMPLETE
+
+ Performance counter stats for '/mnt/c/Users/PC/NexusFlow/build-perf-linux/nexusflow':
+
+        1292628079      cycles                                                                
+        1050844251      instructions                                                          
+         164531126      branches                                                              
+           5410647      branch-misses                                                         
+          32037798      cache-references                                                      
+          10545436      cache-misses                                                          
+             14435      context-switches                                                      
+               158      cpu-migrations                                                        
+              2287      page-faults                                                           
+
+       5.114044608 seconds time elapsed
+
+       0.953489000 seconds user
+       1.350776000 seconds sys
+
+

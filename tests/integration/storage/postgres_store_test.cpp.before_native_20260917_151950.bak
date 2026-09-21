@@ -1,0 +1,40 @@
+﻿#include <cstdint>
+#include <iostream>
+
+#include "postgres_store.hpp"
+
+int main() {
+    nexusflow::PostgresStore postgres;
+
+    if (!postgres.connect()) {
+        std::cerr << "PostgreSQL connection failed." << std::endl;
+        return 1;
+    }
+
+    std::cout << "PostgreSQL connection: PASS" << std::endl;
+
+    if (!postgres.create_schema()) {
+        std::cerr << "PostgreSQL schema creation failed." << std::endl;
+        return 1;
+    }
+
+    std::cout << "PostgreSQL schema: PASS" << std::endl;
+
+    if (!postgres.insert_event(
+            900000001ULL,
+            1700000000000000000LL,
+            "nexusflow",
+            "integration_test",
+            42)) {
+        std::cerr << "PostgreSQL event insertion failed." << std::endl;
+        return 1;
+    }
+
+    std::cout << "PostgreSQL insert: PASS" << std::endl;
+
+    postgres.disconnect();
+
+    std::cout << "POSTGRESQL INTEGRATION TEST: PASS" << std::endl;
+
+    return 0;
+}

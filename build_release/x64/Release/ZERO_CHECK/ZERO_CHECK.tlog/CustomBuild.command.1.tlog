@@ -1,0 +1,10 @@
+^C:\USERS\PC\NEXUSFLOW\BUILD_RELEASE\CMAKEFILES\3F127D369A79B1F012D32C5BF1577342\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/PC/NexusFlow -BC:/Users/PC/NexusFlow/build_release --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/PC/NexusFlow/build_release/NexusFlow.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

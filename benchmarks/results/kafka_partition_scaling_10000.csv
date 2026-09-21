@@ -1,0 +1,4 @@
+﻿"Topic","Partitions","Events","Produced","Received","Submitted","Rejected","Processed","Allow","Review","Block","ProducerEPS","E2EEPS","Integrity"
+"nexusflow-scale-p1-20260920","1","10000","10000","10000","10000","0","10000","10000","0","0","4185.74","2151.42","PASS"
+"nexusflow-scale-p2-20260920","2","10000","10000","10000","10000","0","10000","10000","0","0","1620.84","1443.59","PASS"
+"nexusflow-scale-p4-20260920","4","10000","10000","10000","10000","0","10000","10000","0","0","59651.09","7529.28","PASS"

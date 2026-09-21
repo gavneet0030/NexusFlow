@@ -1,0 +1,78 @@
+﻿FROM ubuntu:24.04 AS builder
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    ninja-build \
+    git \
+    pkg-config \
+    libssl-dev \
+    protobuf-compiler \
+    libprotobuf-dev \
+    protobuf-compiler-grpc \
+    libgrpc++-dev \
+    libre2-dev \
+    libabsl-dev \
+    librdkafka-dev \
+    libhiredis-dev \
+    libpq-dev \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /src
+
+COPY . /src
+
+RUN git clone --depth 1 --branch 1.3.15 https://github.com/sewenew/redis-plus-plus.git /tmp/redis-plus-plus && \
+    cmake -S /tmp/redis-plus-plus -B /tmp/redis-plus-plus/build \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DREDIS_PLUS_PLUS_BUILD_TEST=OFF \
+        -DCMAKE_INSTALL_PREFIX=/usr/local && \
+    cmake --build /tmp/redis-plus-plus/build --parallel && \
+    cmake --install /tmp/redis-plus-plus/build && \
+    ldconfig
+
+RUN mkdir -p /src/build-linux && \
+    cmake -S /src -B /src/build-linux \
+        -G Ninja \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DNEXUSFLOW_BUILD_TESTS=OFF && \
+    cmake --build /src/build-linux --parallel --target nexusflow
+
+FROM ubuntu:24.04 AS runtime
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    libstdc++6 \
+    libgcc-s1 \
+    libssl3 \
+    libprotobuf32 \
+    libgrpc++1.51 \
+    libre2-10 \
+    libhiredis1.1.0 \
+    libpq5 \
+    librdkafka1 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /src/build-linux/app/nexusflow /app/nexusflow
+COPY --from=builder /usr/local/lib/libredis++.so* /usr/local/lib/
+COPY --from=builder /usr/local/lib/libhiredis.so* /usr/local/lib/
+
+RUN ldconfig
+
+RUN useradd --create-home --shell /usr/sbin/nologin nexusflow && \
+    mkdir -p /app && \
+    chown -R nexusflow:nexusflow /app
+
+USER nexusflow
+
+WORKDIR /app
+
+EXPOSE 8080 9100
+
+ENTRYPOINT ["/app/nexusflow"]
+

@@ -1,0 +1,41 @@
+﻿add_library(nexusflow_opentelemetry
+    src/trace_context.cpp
+    src/otlp_exporter.cpp
+    generated/trace.pb.cc
+    generated/trace_service.pb.cc
+)
+
+target_include_directories(nexusflow_opentelemetry
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/generated
+)
+
+target_compile_features(nexusflow_opentelemetry
+    PUBLIC
+        cxx_std_20
+)
+
+# Use the exact protobuf CMake target belonging to
+# the same installation that generated the sources.
+find_package(Protobuf CONFIG REQUIRED)
+
+if (TARGET protobuf::libprotobuf)
+    target_link_libraries(
+        nexusflow_opentelemetry
+        PUBLIC
+            protobuf::libprotobuf
+            winhttp
+    )
+elseif (TARGET protobuf::libprotobuf-lite)
+    target_link_libraries(
+        nexusflow_opentelemetry
+        PUBLIC
+            protobuf::libprotobuf-lite
+            winhttp
+    )
+else()
+    message(FATAL_ERROR
+        "No compatible protobuf CMake target found"
+    )
+endif()

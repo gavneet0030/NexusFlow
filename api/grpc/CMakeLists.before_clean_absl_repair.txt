@@ -1,0 +1,173 @@
+set(GRPC_GENERATED_DIR
+    ${CMAKE_CURRENT_SOURCE_DIR}/generated
+)
+
+set(GRPC_PROTO
+    ${CMAKE_CURRENT_SOURCE_DIR}/nexusflow.proto
+)
+
+set(GRPC_PROTO_SRCS
+    ${GRPC_GENERATED_DIR}/nexusflow.pb.cc
+    ${GRPC_GENERATED_DIR}/nexusflow.grpc.pb.cc
+)
+
+set(GRPC_PROTO_HDRS
+    ${GRPC_GENERATED_DIR}/nexusflow.pb.h
+    ${GRPC_GENERATED_DIR}/nexusflow.grpc.pb.h
+)
+
+find_package(Protobuf CONFIG REQUIRED)
+find_package(absl CONFIG REQUIRED)
+find_package(gRPC CONFIG REQUIRED)
+
+add_library(nexusflow_grpc_generated
+    ${GRPC_PROTO_SRCS}
+)
+
+target_include_directories(nexusflow_grpc_generated
+    PUBLIC
+        ${GRPC_GENERATED_DIR}
+)
+
+target_link_libraries(nexusflow_grpc_generated
+    PUBLIC
+        protobuf::libprotobuf
+        gRPC::grpc++
+)
+
+add_library(nexusflow_grpc_service
+    nexusflow_grpc_service.cpp
+    nexusflow_grpc_server.cpp
+
+    ${CMAKE_SOURCE_DIR}/core/processor/integrated_adaptive_pipeline.cpp
+    ${CMAKE_SOURCE_DIR}/core/event/event.cpp
+    ${CMAKE_SOURCE_DIR}/core/processor/event_processor.cpp
+    ${CMAKE_SOURCE_DIR}/core/scheduler/scheduler_v2.cpp
+    ${CMAKE_SOURCE_DIR}/core/scheduler/runtime_scheduler.cpp
+    ${CMAKE_SOURCE_DIR}/core/workers/adaptive_worker_pool.cpp
+)
+
+target_include_directories(nexusflow_grpc_service
+    PUBLIC
+        ${CMAKE_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${GRPC_GENERATED_DIR}
+)
+
+target_link_libraries(nexusflow_grpc_service
+    PUBLIC
+        nexusflow_grpc_generated
+        gRPC::grpc++
+        protobuf::libprotobuf
+)
+
+
+# Stage the Anaconda Abseil runtime used by the Anaconda gRPC libraries.
+set(NEXUSFLOW_ANACONDA_BIN
+    "C:/Users/PC/anaconda3/Library/bin"
+)
+
+function(nexusflow_stage_grpc_runtime target_name)
+    add_custom_command(
+        TARGET ${target_name}
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${NEXUSFLOW_ANACONDA_BIN}/abseil_dll.dll"
+            "$<TARGET_FILE_DIR:${target_name}>/abseil_dll.dll"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${NEXUSFLOW_ANACONDA_BIN}/abseil_dll.dll"
+            "$<TARGET_FILE_DIR:${target_name}>/abseil_dll.dll"
+        VERBATIM
+    )
+endfunction()
+
+# Stage the Anaconda Abseil runtime used by the Anaconda gRPC libraries.
+set(NEXUSFLOW_ANACONDA_BIN
+    "C:/Users/PC/anaconda3/Library/bin"
+)
+
+function(nexusflow_stage_grpc_runtime target_name)
+    add_custom_command(
+        TARGET ${target_name}
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${NEXUSFLOW_ANACONDA_BIN}/abseil_dll.dll"
+            "$<TARGET_FILE_DIR:${target_name}>/abseil_dll.dll"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${NEXUSFLOW_ANACONDA_BIN}/abseil_dll.dll"
+            "$<TARGET_FILE_DIR:${target_name}>/abseil_dll.dll"
+        VERBATIM
+    )
+endfunction()
+
+# NexusFlow Abseil link configuration.
+# gRPC and protobuf are provided by the Anaconda installation,
+# so the matching Anaconda Abseil import library must be used.
+set(NEXUSFLOW_ANACONDA_LIB
+    "C:/Users/PC/anaconda3/Library/lib"
+)
+
+set(NEXUSFLOW_ANACONDA_ABSL_LIB
+    "${NEXUSFLOW_ANACONDA_LIB}/abseil_dll.lib"
+)
+
+# NexusFlow Abseil link configuration.
+# gRPC and protobuf are provided by the Anaconda installation,
+# so the matching Anaconda Abseil import library must be used.
+set(NEXUSFLOW_ANACONDA_LIB
+    "C:/Users/PC/anaconda3/Library/lib"
+)
+
+set(NEXUSFLOW_ANACONDA_ABSL_LIB
+    "${NEXUSFLOW_ANACONDA_LIB}/abseil_dll.lib"
+)
+add_executable(grpc_core_pipeline_test
+    ${CMAKE_SOURCE_DIR}/tests/integration/grpc/grpc_core_pipeline_test.cpp
+)
+
+target_include_directories(grpc_core_pipeline_test
+    PRIVATE
+        ${CMAKE_SOURCE_DIR}
+        ${GRPC_GENERATED_DIR}
+)
+
+target_link_libraries(grpc_core_pipeline_test
+    PRIVATE
+        ""
+        ""
+        nexusflow_grpc_service
+)
+# Force the runtime Abseil DLL to match the Anaconda Abseil import library.
+# The Anaconda gRPC package links against Anaconda's abseil_dll.lib.
+add_executable(grpc_transport_test
+    ${CMAKE_SOURCE_DIR}/tests/integration/grpc/grpc_transport_test.cpp
+)
+
+target_include_directories(grpc_transport_test
+    PRIVATE
+        ${CMAKE_SOURCE_DIR}
+        ${GRPC_GENERATED_DIR}
+)
+
+target_link_libraries(grpc_transport_test
+    PRIVATE
+        ""
+        ""
+        nexusflow_grpc_service
+        nexusflow_grpc_generated
+        gRPC::grpc++
+        protobuf::libprotobuf
+)
+add_test(
+    NAME grpc_core_pipeline_test
+    COMMAND grpc_core_pipeline_test
+)
+
+add_test(
+    NAME grpc_transport_test
+    COMMAND grpc_transport_test
+)
+# Stage the matching Anaconda runtime after the test targets are built.
+# Stage the matching Anaconda runtime after the test targets are built.
+nexusflow_stage_grpc_runtime(grpc_core_pipeline_test)
+nexusflow_stage_grpc_runtime(grpc_transport_test)

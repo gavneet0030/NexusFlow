@@ -1,0 +1,10 @@
+^C:\USERS\PC\NEXUSFLOW\BUILD_OBSERVABILITY_HTTP\CMAKEFILES\8D65A7FF21302A7B751D1C1480490BDB\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/PC/NexusFlow -BC:/Users/PC/NexusFlow/build_observability_http --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/PC/NexusFlow/build_observability_http/NexusFlow.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

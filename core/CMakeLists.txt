@@ -1,0 +1,32 @@
+﻿# ============================================================
+# NexusFlow Core Library
+# ============================================================
+
+add_library(nexusflow_core STATIC
+    workers/worker.cpp
+    workers/worker_pool.cpp
+    workers/lock_free_worker_pool.cpp
+    workers/adaptive_worker_pool.cpp
+    processor/event_processor.cpp
+)
+
+target_include_directories(nexusflow_core
+    PUBLIC
+        ${CMAKE_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/event
+        ${CMAKE_CURRENT_SOURCE_DIR}/queue
+        ${CMAKE_CURRENT_SOURCE_DIR}/scheduler
+        ${CMAKE_CURRENT_SOURCE_DIR}/workers
+        ${CMAKE_CURRENT_SOURCE_DIR}/processor
+        ${CMAKE_CURRENT_SOURCE_DIR}/memory
+)
+
+target_compile_features(
+    nexusflow_core
+    PUBLIC
+        cxx_std_20
+)
+
+
+

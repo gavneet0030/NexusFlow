@@ -1,0 +1,24 @@
+NEXUSFLOW AUTOMATED CAPACITY ANALYSIS
+============================================
+Source: C:\Users\PC\NexusFlow\benchmarks\results\capacity_sweep\capacity_sweep_2026-09-12_17-06-52.txt
+Records analyzed: 9
+Integrity: PASS
+
+Peak throughput: 32030.59 EPS
+Peak load: 40000 EPS
+Lowest P99: 19 us
+Highest P99: 38 us
+Maximum workers: 12
+Maximum throttled events: 3234
+First below 80% efficiency: 45000 EPS
+
+LoadEPS,ThroughputEPS,EfficiencyPct,P99us,Workers,Throttled,Integrity
+10000,9879.13,98.79,19.00,2,0,PASS
+15000,14671.26,97.81,32.00,3,0,PASS
+20000,19602.50,98.01,38.00,2,0,PASS
+25000,24001.68,96.01,30.00,7,0,PASS
+30000,27964.66,93.22,22.00,10,0,PASS
+35000,31325.53,89.50,20.00,11,314,PASS
+40000,32030.59,80.08,19.00,12,2089,PASS
+45000,31968.85,71.04,19.00,12,3234,PASS
+50000,26648.46,53.30,33.00,10,2389,PASS

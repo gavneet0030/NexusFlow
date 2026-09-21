@@ -1,0 +1,327 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{24376E6F-3E07-3E95-B2B2-F1971244ECC2}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <VcpkgEnabled>false</VcpkgEnabled>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>nexusflow_grpc_generated</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="do_not_import_user.props" Condition="exists('do_not_import_user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\PC\NexusFlow\build_observability_http\api\grpc\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">nexusflow_grpc_generated.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">nexusflow_grpc_generated</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\PC\NexusFlow\build_observability_http\api\grpc\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">nexusflow_grpc_generated.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">nexusflow_grpc_generated</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\PC\NexusFlow\build_observability_http\api\grpc\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">nexusflow_grpc_generated.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">nexusflow_grpc_generated</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\PC\NexusFlow\build_observability_http\api\grpc\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">nexusflow_grpc_generated.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">nexusflow_grpc_generated</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\PC\NexusFlow\api\grpc\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/PC/anaconda3/Library/include" /external:I "C:/vcpkg/installed/x64-windows/include"</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;PROTOBUF_USE_DLLS;ABSL_CONSUME_DLL;GRPCXX_DLL_IMPORTS;GRPC_DLL_IMPORTS;GPR_DLL_IMPORTS;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;PROTOBUF_USE_DLLS;ABSL_CONSUME_DLL;GRPCXX_DLL_IMPORTS;GRPC_DLL_IMPORTS;GPR_DLL_IMPORTS;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\PC\NexusFlow\api\grpc\generated;C:\Users\PC\anaconda3\Library\include;C:\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\PC\NexusFlow\api\grpc\generated;C:\Users\PC\anaconda3\Library\include;C:\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\PC\NexusFlow\api\grpc\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/PC/anaconda3/Library/include" /external:I "C:/vcpkg/installed/x64-windows/include"</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;PROTOBUF_USE_DLLS;ABSL_CONSUME_DLL;GRPCXX_DLL_IMPORTS;GRPC_DLL_IMPORTS;GPR_DLL_IMPORTS;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;PROTOBUF_USE_DLLS;ABSL_CONSUME_DLL;GRPCXX_DLL_IMPORTS;GRPC_DLL_IMPORTS;GPR_DLL_IMPORTS;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\PC\NexusFlow\api\grpc\generated;C:\Users\PC\anaconda3\Library\include;C:\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\PC\NexusFlow\api\grpc\generated;C:\Users\PC\anaconda3\Library\include;C:\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\PC\NexusFlow\api\grpc\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/PC/anaconda3/Library/include" /external:I "C:/vcpkg/installed/x64-windows/include"</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;PROTOBUF_USE_DLLS;ABSL_CONSUME_DLL;GRPCXX_DLL_IMPORTS;GRPC_DLL_IMPORTS;GPR_DLL_IMPORTS;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;PROTOBUF_USE_DLLS;ABSL_CONSUME_DLL;GRPCXX_DLL_IMPORTS;GRPC_DLL_IMPORTS;GPR_DLL_IMPORTS;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\PC\NexusFlow\api\grpc\generated;C:\Users\PC\anaconda3\Library\include;C:\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\PC\NexusFlow\api\grpc\generated;C:\Users\PC\anaconda3\Library\include;C:\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Users\PC\NexusFlow\api\grpc\generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "C:/Users/PC/anaconda3/Library/include" /external:I "C:/vcpkg/installed/x64-windows/include"</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;PROTOBUF_USE_DLLS;ABSL_CONSUME_DLL;GRPCXX_DLL_IMPORTS;GRPC_DLL_IMPORTS;GPR_DLL_IMPORTS;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;PROTOBUF_USE_DLLS;ABSL_CONSUME_DLL;GRPCXX_DLL_IMPORTS;GRPC_DLL_IMPORTS;GPR_DLL_IMPORTS;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\PC\NexusFlow\api\grpc\generated;C:\Users\PC\anaconda3\Library\include;C:\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Users\PC\NexusFlow\api\grpc\generated;C:\Users\PC\anaconda3\Library\include;C:\vcpkg\installed\x64-windows\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\PC\NexusFlow\api\grpc\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/PC/NexusFlow/api/grpc/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/PC/NexusFlow -BC:/Users/PC/NexusFlow/build_observability_http --check-stamp-file C:/Users/PC/NexusFlow/build_observability_http/api/grpc/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-4.4\Modules\CMakeFindDependencyMacro.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindOpenSSL.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindZLIB.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\Internal\CheckCommon.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\SelectLibraryConfigurations.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCConfig.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCConfigVersion.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCPluginTargets-release.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCPluginTargets.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCTargets-release.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCTargets.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\modules\Findc-ares.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\modules\Findre2.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-config-version.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-config.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-generate.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-options.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-targets-release.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-targets.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\re2\re2Config.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\re2\re2ConfigVersion.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\re2\re2Targets-release.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\re2\re2Targets.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslConfig.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslConfigVersion.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslTargets-debug.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslTargets-release.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslTargets.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-config-version.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-config.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-targets-debug.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-targets-release.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-targets.cmake;C:\vcpkg\installed\x64-windows\share\openssl\vcpkg-cmake-wrapper.cmake;C:\vcpkg\installed\x64-windows\share\utf8_range\utf8_range-config.cmake;C:\vcpkg\installed\x64-windows\share\utf8_range\utf8_range-targets-debug.cmake;C:\vcpkg\installed\x64-windows\share\utf8_range\utf8_range-targets-release.cmake;C:\vcpkg\installed\x64-windows\share\utf8_range\utf8_range-targets.cmake;C:\vcpkg\installed\x64-windows\share\zlib\vcpkg-cmake-wrapper.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\PC\NexusFlow\build_observability_http\api\grpc\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/PC/NexusFlow/api/grpc/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/PC/NexusFlow -BC:/Users/PC/NexusFlow/build_observability_http --check-stamp-file C:/Users/PC/NexusFlow/build_observability_http/api/grpc/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-4.4\Modules\CMakeFindDependencyMacro.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindOpenSSL.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindZLIB.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\Internal\CheckCommon.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\SelectLibraryConfigurations.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCConfig.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCConfigVersion.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCPluginTargets-release.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCPluginTargets.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCTargets-release.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCTargets.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\modules\Findc-ares.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\modules\Findre2.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-config-version.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-config.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-generate.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-options.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-targets-release.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-targets.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\re2\re2Config.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\re2\re2ConfigVersion.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\re2\re2Targets-release.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\re2\re2Targets.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslConfig.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslConfigVersion.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslTargets-debug.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslTargets-release.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslTargets.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-config-version.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-config.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-targets-debug.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-targets-release.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-targets.cmake;C:\vcpkg\installed\x64-windows\share\openssl\vcpkg-cmake-wrapper.cmake;C:\vcpkg\installed\x64-windows\share\utf8_range\utf8_range-config.cmake;C:\vcpkg\installed\x64-windows\share\utf8_range\utf8_range-targets-debug.cmake;C:\vcpkg\installed\x64-windows\share\utf8_range\utf8_range-targets-release.cmake;C:\vcpkg\installed\x64-windows\share\utf8_range\utf8_range-targets.cmake;C:\vcpkg\installed\x64-windows\share\zlib\vcpkg-cmake-wrapper.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\PC\NexusFlow\build_observability_http\api\grpc\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/PC/NexusFlow/api/grpc/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/PC/NexusFlow -BC:/Users/PC/NexusFlow/build_observability_http --check-stamp-file C:/Users/PC/NexusFlow/build_observability_http/api/grpc/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-4.4\Modules\CMakeFindDependencyMacro.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindOpenSSL.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindZLIB.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\Internal\CheckCommon.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\SelectLibraryConfigurations.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCConfig.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCConfigVersion.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCPluginTargets-release.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCPluginTargets.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCTargets-release.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCTargets.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\modules\Findc-ares.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\modules\Findre2.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-config-version.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-config.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-generate.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-options.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-targets-release.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-targets.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\re2\re2Config.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\re2\re2ConfigVersion.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\re2\re2Targets-release.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\re2\re2Targets.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslConfig.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslConfigVersion.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslTargets-debug.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslTargets-release.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslTargets.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-config-version.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-config.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-targets-debug.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-targets-release.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-targets.cmake;C:\vcpkg\installed\x64-windows\share\openssl\vcpkg-cmake-wrapper.cmake;C:\vcpkg\installed\x64-windows\share\utf8_range\utf8_range-config.cmake;C:\vcpkg\installed\x64-windows\share\utf8_range\utf8_range-targets-debug.cmake;C:\vcpkg\installed\x64-windows\share\utf8_range\utf8_range-targets-release.cmake;C:\vcpkg\installed\x64-windows\share\utf8_range\utf8_range-targets.cmake;C:\vcpkg\installed\x64-windows\share\zlib\vcpkg-cmake-wrapper.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\PC\NexusFlow\build_observability_http\api\grpc\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/PC/NexusFlow/api/grpc/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/PC/NexusFlow -BC:/Users/PC/NexusFlow/build_observability_http --check-stamp-file C:/Users/PC/NexusFlow/build_observability_http/api/grpc/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-4.4\Modules\CMakeFindDependencyMacro.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\CheckCXXSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\CheckLibraryExists.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindOpenSSL.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindThreads.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\FindZLIB.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\Internal\CheckCommon.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\Internal\CheckSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-4.4\Modules\SelectLibraryConfigurations.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCConfig.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCConfigVersion.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCPluginTargets-release.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCPluginTargets.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCTargets-release.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\gRPCTargets.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\modules\Findc-ares.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\grpc\modules\Findre2.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-config-version.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-config.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-generate.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-options.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-targets-release.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\protobuf\protobuf-targets.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\re2\re2Config.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\re2\re2ConfigVersion.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\re2\re2Targets-release.cmake;C:\Users\PC\anaconda3\Library\lib\cmake\re2\re2Targets.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslConfig.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslConfigVersion.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslTargets-debug.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslTargets-release.cmake;C:\vcpkg\installed\x64-windows\share\absl\abslTargets.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-config-version.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-config.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-targets-debug.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-targets-release.cmake;C:\vcpkg\installed\x64-windows\share\c-ares\c-ares-targets.cmake;C:\vcpkg\installed\x64-windows\share\openssl\vcpkg-cmake-wrapper.cmake;C:\vcpkg\installed\x64-windows\share\utf8_range\utf8_range-config.cmake;C:\vcpkg\installed\x64-windows\share\utf8_range\utf8_range-targets-debug.cmake;C:\vcpkg\installed\x64-windows\share\utf8_range\utf8_range-targets-release.cmake;C:\vcpkg\installed\x64-windows\share\utf8_range\utf8_range-targets.cmake;C:\vcpkg\installed\x64-windows\share\zlib\vcpkg-cmake-wrapper.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\PC\NexusFlow\build_observability_http\api\grpc\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\PC\NexusFlow\api\grpc\generated\nexusflow.pb.cc" />
+    <ClCompile Include="C:\Users\PC\NexusFlow\api\grpc\generated\nexusflow.grpc.pb.cc" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\PC\NexusFlow\build_observability_http\ZERO_CHECK.vcxproj">
+      <Project>{390FF9DE-873A-3361-B6C7-9A6DD4EBC5F6}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,403 @@
+﻿#include "core/event/event.hpp"
+#include "core/queue/bounded_mpmc_queue.hpp"
+
+#define NOMINMAX
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#include <sys/resource.h>
+#include <fstream>
+#include <string>
+#endif
+#ifdef _WIN32`r`n#include <psapi.h>`r`n#endif`r`n#include <algorithm>
+#include <atomic>
+#include <chrono>
+#include <cstdint>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <mutex>
+#include <thread>
+#include <vector>
+
+#pragma comment(lib, "Psapi.lib")
+
+using namespace nexusflow;
+
+struct Result {
+    size_t workers{0};
+    uint64_t submitted{0};
+    uint64_t processed{0};
+    double throughput_eps{0.0};
+    double cpu_percent{0.0};
+    double peak_memory_mb{0.0};
+};
+
+double get_process_cpu_seconds()
+{
+    FILETIME creation_time{};
+    FILETIME exit_time{};
+    FILETIME kernel_time{};
+    FILETIME user_time{};
+
+    if (!GetProcessTimes(
+            GetCurrentProcess(),
+            &creation_time,
+            &exit_time,
+            &kernel_time,
+            &user_time)) {
+        return 0.0;
+    }
+
+    ULARGE_INTEGER kernel{};
+    ULARGE_INTEGER user{};
+
+    kernel.LowPart = kernel_time.dwLowDateTime;
+    kernel.HighPart = kernel_time.dwHighDateTime;
+
+    user.LowPart = user_time.dwLowDateTime;
+    user.HighPart = user_time.dwHighDateTime;
+
+    const uint64_t total_100ns =
+        kernel.QuadPart + user.QuadPart;
+
+    return static_cast<double>(total_100ns) / 10000000.0;
+}
+
+double get_peak_memory_mb()
+{
+    PROCESS_MEMORY_COUNTERS counters{};
+
+    if (!GetProcessMemoryInfo(
+            GetCurrentProcess(),
+            &counters,
+            sizeof(counters))) {
+        return 0.0;
+    }
+
+    return static_cast<double>(
+        counters.PeakWorkingSetSize
+    ) / (1024.0 * 1024.0);
+}
+
+Result run_benchmark(size_t worker_count)
+{
+    constexpr size_t queue_capacity = 4096;
+    constexpr size_t total_events = 100000;
+
+    BoundedMPMCQueue<Event> queue(queue_capacity);
+
+    std::atomic<uint64_t> processed{0};
+    std::atomic<bool> producers_finished{false};
+
+    std::vector<std::thread> workers;
+    workers.reserve(worker_count);
+
+    const auto start =
+        std::chrono::steady_clock::now();
+
+    const double cpu_start =
+        get_process_cpu_seconds();
+
+    for (size_t worker_id = 0;
+         worker_id < worker_count;
+         ++worker_id) {
+
+        workers.emplace_back([&]() {
+            Event event;
+
+            while (true) {
+                if (queue.try_pop(event)) {
+                    volatile uint64_t work = 0;
+
+                    for (uint64_t i = 0; i < 1000; ++i) {
+                        work +=
+                            (event.id + i) % 997;
+                    }
+
+                    (void)work;
+
+                    processed.fetch_add(
+                        1,
+                        std::memory_order_relaxed
+                    );
+                }
+                else {
+                    if (
+                        producers_finished.load(
+                            std::memory_order_acquire
+                        ) &&
+                        queue.empty()
+                    ) {
+                        break;
+                    }
+
+                    std::this_thread::yield();
+                }
+            }
+        });
+    }
+
+    uint64_t submitted = 0;
+
+    for (size_t i = 0;
+         i < total_events;
+         ++i) {
+
+        Event event;
+
+        event.id =
+            static_cast<uint64_t>(i);
+
+        event.timestamp_ns =
+            static_cast<uint64_t>(
+                std::chrono::duration_cast<
+                    std::chrono::nanoseconds
+                >(
+                    std::chrono::steady_clock::now()
+                        .time_since_epoch()
+                ).count()
+            );
+
+        event.priority =
+            EventPriority::NORMAL;
+
+        event.value =
+            static_cast<double>(i);
+
+        event.source =
+            "resource-benchmark";
+
+        event.type =
+            "synthetic";
+
+        while (!queue.try_push(std::move(event))) {
+            std::this_thread::yield();
+
+            event.id =
+                static_cast<uint64_t>(i);
+
+            event.timestamp_ns =
+                static_cast<uint64_t>(
+                    std::chrono::duration_cast<
+                        std::chrono::nanoseconds
+                    >(
+                        std::chrono::steady_clock::now()
+                            .time_since_epoch()
+                    ).count()
+                );
+
+            event.priority =
+                EventPriority::NORMAL;
+
+            event.value =
+                static_cast<double>(i);
+
+            event.source =
+                "resource-benchmark";
+
+            event.type =
+                "synthetic";
+        }
+
+        ++submitted;
+    }
+
+    producers_finished.store(
+        true,
+        std::memory_order_release
+    );
+
+    for (auto& worker : workers) {
+        worker.join();
+    }
+
+    const auto end =
+        std::chrono::steady_clock::now();
+
+    const double cpu_end =
+        get_process_cpu_seconds();
+
+    const double elapsed_seconds =
+        std::chrono::duration<double>(
+            end - start
+        ).count();
+
+    const double cpu_seconds =
+        cpu_end - cpu_start;
+
+    const unsigned int hardware_threads =
+        std::max(
+            1u,
+            std::thread::hardware_concurrency()
+        );
+
+    double cpu_percent = 0.0;
+
+    if (elapsed_seconds > 0.0) {
+        cpu_percent =
+            100.0 *
+            cpu_seconds /
+            elapsed_seconds /
+            static_cast<double>(hardware_threads);
+    }
+
+    cpu_percent =
+        std::max(0.0, std::min(cpu_percent, 100.0));
+
+    Result result;
+
+    result.workers =
+        worker_count;
+
+    result.submitted =
+        submitted;
+
+    result.processed =
+        processed.load();
+
+    result.throughput_eps =
+        elapsed_seconds > 0.0
+            ? static_cast<double>(
+                  result.processed
+              ) / elapsed_seconds
+            : 0.0;
+
+    result.cpu_percent =
+        cpu_percent;
+
+    result.peak_memory_mb =
+        get_peak_memory_mb();
+
+    return result;
+}
+
+int main()
+{
+    const std::vector<size_t> worker_counts = {
+        1,
+        2,
+        4,
+        8,
+        16
+    };
+
+    std::vector<Result> results;
+
+    std::cout
+        << "============================================================\n";
+
+    std::cout
+        << "NexusFlow CPU and Memory Benchmark\n";
+
+    std::cout
+        << "============================================================\n\n";
+
+    for (size_t workers : worker_counts) {
+        std::cout
+            << "Running with "
+            << workers
+            << " workers...\n";
+
+        Result result =
+            run_benchmark(workers);
+
+        results.push_back(result);
+
+        std::cout
+            << std::fixed
+            << std::setprecision(2);
+
+        std::cout
+            << "Workers:       "
+            << result.workers
+            << "\n";
+
+        std::cout
+            << "Submitted:     "
+            << result.submitted
+            << "\n";
+
+        std::cout
+            << "Processed:     "
+            << result.processed
+            << "\n";
+
+        std::cout
+            << "Throughput:    "
+            << result.throughput_eps
+            << " events/sec\n";
+
+        std::cout
+            << "CPU:           "
+            << result.cpu_percent
+            << "%\n";
+
+        std::cout
+            << "Peak Memory:   "
+            << result.peak_memory_mb
+            << " MB\n";
+
+        std::cout
+            << "---------------------------------------------\n";
+    }
+
+    std::ofstream csv(
+        ".\\benchmarks\\results\\resource_utilization.csv"
+    );
+
+    csv
+        << "workers,submitted,processed,"
+           "throughput_eps,cpu_percent,"
+           "peak_memory_mb\n";
+
+    for (const auto& result : results) {
+        csv
+            << result.workers << ","
+            << result.submitted << ","
+            << result.processed << ","
+            << std::fixed
+            << std::setprecision(4)
+            << result.throughput_eps << ","
+            << result.cpu_percent << ","
+            << result.peak_memory_mb
+            << "\n";
+    }
+
+    csv.close();
+
+    bool integrity_passed = true;
+
+    for (const auto& result : results) {
+        if (
+            result.submitted !=
+            result.processed
+        ) {
+            integrity_passed = false;
+        }
+    }
+
+    std::cout
+        << "\n============================================================\n";
+
+    std::cout
+        << "Integrity: "
+        << (
+            integrity_passed
+                ? "PASS"
+                : "FAIL"
+        )
+        << "\n";
+
+    std::cout
+        << "Results written to:\n"
+        << "benchmarks/results/resource_utilization.csv\n";
+
+    std::cout
+        << "============================================================\n";
+
+    return integrity_passed ? 0 : 1;
+}
+
+

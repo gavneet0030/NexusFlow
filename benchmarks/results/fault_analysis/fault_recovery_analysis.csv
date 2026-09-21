@@ -1,0 +1,2 @@
+submitted,processed_before_failure,processed_after_recovery,processed_total,remaining,failure_detection_ms,recovery_time_ms,total_time_ms,integrity,pre_failure_processing_pct,post_recovery_processing_pct,recovery_overhead_pct,recovery_throughput_eps,integrity_passed
+100000,96109,3891,100000,0,0.537,76.0863,1273.41,PASS,96.109,3.891,5.975004122788417,51139.29840194622,True

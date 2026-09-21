@@ -1,0 +1,452 @@
+#include "core/scheduler/scheduler_v2.hpp"
+
+#include <algorithm>
+#include <chrono>
+#include <cmath>
+
+namespace nexusflow {
+
+std::uint64_t SchedulerV2::now_us()
+{
+    const auto now =
+        std::chrono::steady_clock::now();
+
+    const auto duration =
+        std::chrono::duration_cast<
+            std::chrono::microseconds>(
+                now.time_since_epoch());
+
+    return static_cast<std::uint64_t>(
+        duration.count());
+}
+
+SchedulerV2::SchedulerV2(
+    const SchedulerV2Config& config)
+    : config_(config)
+{
+    if (config_.maximum_workers == 0) {
+        config_.maximum_workers = 1;
+    }
+
+    state_.current_workers = 1;
+    state_.initialized = false;
+}
+
+SchedulingDecision SchedulerV2::decide(
+    const SchedulerMetrics& metrics) const
+{
+    const double arrival_alpha =
+        std::clamp(
+            config_.arrival_rate_ema_alpha,
+            0.01,
+            1.0);
+
+    const double queue_alpha =
+        std::clamp(
+            config_.queue_growth_ema_alpha,
+            0.01,
+            1.0);
+
+    const double latency_alpha =
+        std::clamp(
+            config_.latency_ema_alpha,
+            0.01,
+            1.0);
+
+    const double current_queue =
+        static_cast<double>(
+            metrics.queue_depth);
+
+    if (!state_.initialized) {
+
+        state_.queue_depth_ema =
+            current_queue;
+
+        state_.arrival_rate_ema_eps =
+            metrics.arrival_rate_eps;
+
+        state_.latency_ema_us =
+            static_cast<double>(
+                metrics.recent_p99_latency_us);
+
+        state_.initialized = true;
+    }
+
+    const double queue_delta =
+        current_queue -
+        state_.queue_depth_ema;
+
+    state_.queue_depth_ema =
+        queue_alpha * current_queue +
+        (1.0 - queue_alpha) *
+            state_.queue_depth_ema;
+
+    state_.queue_growth_ema =
+        queue_alpha * queue_delta +
+        (1.0 - queue_alpha) *
+            state_.queue_growth_ema;
+
+    state_.arrival_rate_ema_eps =
+        arrival_alpha *
+            metrics.arrival_rate_eps +
+        (1.0 - arrival_alpha) *
+            state_.arrival_rate_ema_eps;
+
+    if (metrics.recent_p99_latency_us > 0) {
+
+        state_.latency_ema_us =
+            latency_alpha *
+                static_cast<double>(
+                    metrics.recent_p99_latency_us)
+            +
+            (1.0 - latency_alpha) *
+                state_.latency_ema_us;
+    }
+
+    SchedulingDecision decision{};
+
+    decision.mode =
+        ProcessingMode::SINGLE;
+
+    decision.batch_size = 1;
+
+    std::size_t desired_workers =
+        state_.current_workers;
+
+    const bool critical =
+        metrics.highest_priority ==
+        EventPriority::CRITICAL;
+
+    const bool high_priority =
+        metrics.highest_priority ==
+        EventPriority::HIGH;
+
+    const bool sla_critical =
+        metrics.remaining_sla_us <=
+        config_.latency_critical_sla_us;
+
+    const bool tail_guard =
+        metrics.remaining_sla_us <=
+            config_.tail_guard_sla_us &&
+        metrics.queue_depth >=
+            config_.tail_guard_queue_threshold;
+
+    const bool queue_high =
+        metrics.queue_depth >=
+        config_.high_worker_queue_threshold;
+
+    const bool queue_extreme =
+        metrics.queue_depth >=
+        config_.extreme_worker_queue_threshold;
+
+    const bool load_moderate =
+        state_.arrival_rate_ema_eps >=
+        config_.low_arrival_rate_eps;
+
+    const bool load_high =
+        state_.arrival_rate_ema_eps >=
+        config_.moderate_arrival_rate_eps;
+
+    const bool queue_is_small =
+        metrics.queue_depth <=
+        config_.low_queue_scale_down_threshold;
+
+    const bool queue_is_empty =
+        metrics.queue_depth == 0;
+
+    const bool queue_is_growing =
+        state_.queue_growth_ema >=
+        config_.scale_up_queue_growth_threshold;
+
+
+    const bool tail_latency_high =
+        state_.latency_ema_us >
+        static_cast<double>(
+            config_.latency_critical_sla_us);
+
+    const bool tail_latency_low =
+        state_.latency_ema_us <=
+        static_cast<double>(
+            config_.low_load_scale_down_latency_us);
+
+    const bool low_load =
+        state_.arrival_rate_ema_eps <
+            config_.low_load_scale_down_threshold;
+
+    const bool safe_to_scale_down =
+        (queue_is_empty || queue_is_small) &&
+        !queue_is_growing &&
+        !tail_latency_high &&
+        tail_latency_low &&
+        low_load;
+
+    decision.sla_bypass =
+        sla_critical || tail_guard;
+
+    if (critical || tail_guard) {
+
+        decision.mode =
+            ProcessingMode::PARALLEL;
+
+        decision.batch_size = 1;
+
+        desired_workers =
+            std::max(
+                desired_workers,
+                config_.critical_min_workers);
+    }
+    else if (high_priority || sla_critical) {
+
+        decision.mode =
+            ProcessingMode::PARALLEL;
+
+        decision.batch_size = 1;
+
+        desired_workers =
+            std::max(
+                desired_workers,
+                config_.high_priority_min_workers);
+    }
+    else if (queue_extreme || load_high) {
+
+        decision.mode =
+            ProcessingMode::PARALLEL;
+
+        decision.batch_size = 1;
+
+        desired_workers =
+            std::max(
+                desired_workers,
+                config_.latency_critical_min_workers);
+
+        // Feed-forward capacity scaling based on offered arrival rate.
+        //
+        // This complements the existing reactive signals:
+        // queue growth, queue depth, and tail latency.
+        //
+        // With the default 5000 EPS per worker:
+        // 10000 EPS -> 2 workers
+        // 20000 EPS -> 4 workers
+        // 30000 EPS -> 6 workers
+        // 40000 EPS -> 8 workers
+        // 50000 EPS -> 10 workers
+        //
+        // The worker target remains bounded by maximum_workers.
+        if (config_.arrival_rate_per_worker_eps > 0.0) {
+
+            const double estimated_workers =
+                std::ceil(
+                    state_.arrival_rate_ema_eps /
+                    config_.arrival_rate_per_worker_eps);
+
+            const std::size_t arrival_rate_workers =
+                static_cast<std::size_t>(
+                    std::max(
+                        1.0,
+                        estimated_workers));
+
+            desired_workers =
+                std::min(
+                    config_.maximum_workers,
+                    std::max(
+                        desired_workers,
+                        arrival_rate_workers));
+        }
+
+        // Enforce the arrival-rate capacity floor after all
+        // feed-forward and reactive calculations.
+        //
+        // This prevents the integrated runtime controller from
+        // finishing a high-load interval below the worker count
+        // required by the observed arrival rate.
+        if (config_.arrival_rate_per_worker_eps > 0.0 &&
+            state_.arrival_rate_ema_eps >=
+                config_.moderate_arrival_rate_eps) {
+
+            const double estimated_workers =
+                std::ceil(
+                    state_.arrival_rate_ema_eps /
+                    config_.arrival_rate_per_worker_eps);
+
+            const std::size_t arrival_capacity_floor =
+                std::min(
+                    config_.maximum_workers,
+                    static_cast<std::size_t>(
+                        std::max(
+                            1.0,
+                            estimated_workers)));
+
+            desired_workers =
+                std::max(
+                    desired_workers,
+                    arrival_capacity_floor);
+        }
+
+        // Reactive pressure signals remain active.
+        if (queue_extreme ||
+            queue_is_growing ||
+            tail_latency_high) {
+
+            desired_workers =
+                std::min(
+                    config_.maximum_workers,
+                    desired_workers + 2);
+        }
+    }
+    else if (queue_high || load_moderate) {
+
+        decision.mode =
+            ProcessingMode::MICRO_BATCH;
+
+        decision.batch_size =
+            config_.micro_batch_size;
+
+        desired_workers =
+            std::max(
+                desired_workers,
+                static_cast<std::size_t>(2));
+    }
+    else {
+
+        decision.mode =
+            ProcessingMode::SINGLE;
+
+        decision.batch_size = 1;
+    }
+
+    // Mode hysteresis.
+    // Heavy-load operation remains PARALLEL while the scheduler
+    // is already using a large worker pool. MICRO_BATCH is allowed
+    // again only after the system clearly leaves the heavy-load region.
+    if (state_.initialized &&
+        state_.current_workers >= static_cast<std::size_t>(8) &&
+        !critical &&
+        !tail_guard &&
+        !high_priority &&
+        !sla_critical) {
+
+        const bool clearly_low_load =
+            state_.arrival_rate_ema_eps <
+                config_.low_arrival_rate_eps &&
+            metrics.queue_depth <=
+                config_.low_queue_scale_down_threshold;
+
+        if (!clearly_low_load &&
+            (load_high ||
+             queue_extreme ||
+             state_.queue_growth_ema >=
+                 config_.scale_up_queue_growth_threshold)) {
+
+            decision.mode =
+                ProcessingMode::PARALLEL;
+
+            decision.batch_size = 1;
+        }
+    }
+    const std::uint64_t current_time =
+        now_us();
+
+    const std::uint64_t elapsed_since_scale =
+        current_time >= state_.last_scale_time_us
+            ? current_time -
+                state_.last_scale_time_us
+            : 0;
+
+    const bool scale_up_allowed =
+        state_.last_scale_time_us == 0 ||
+        elapsed_since_scale >=
+            config_.scale_up_cooldown_us;
+
+    const bool scale_down_allowed =
+        state_.last_scale_time_us == 0 ||
+        elapsed_since_scale >=
+            config_.scale_down_cooldown_us;
+
+    const bool residency_complete =
+        state_.decisions_since_scale >=
+        config_.minimum_worker_residency;
+
+    if (safe_to_scale_down &&
+        scale_down_allowed &&
+        residency_complete &&
+        desired_workers > 1) {
+
+        desired_workers =
+            std::max(
+                static_cast<std::size_t>(1),
+                state_.current_workers - 1);
+    }
+    else if (
+        !safe_to_scale_down &&
+        scale_up_allowed &&
+        (queue_is_growing ||
+         tail_latency_high ||
+         queue_high ||
+         queue_extreme)) {
+
+        const std::size_t increment =
+            queue_extreme ? 2 : 1;
+
+        desired_workers =
+            std::min(
+                config_.maximum_workers,
+                std::max(
+                    desired_workers,
+                    state_.current_workers +
+                        increment));
+    }
+
+    desired_workers =
+        std::max(
+            static_cast<std::size_t>(1),
+            desired_workers);
+
+    desired_workers =
+        std::min(
+            desired_workers,
+            config_.maximum_workers);
+
+    if (desired_workers !=
+        state_.current_workers) {
+
+        state_.current_workers =
+            desired_workers;
+
+        state_.last_scale_time_us =
+            current_time;
+
+        state_.decisions_since_scale = 0;
+    }
+    else {
+
+        ++state_.decisions_since_scale;
+    }
+
+    decision.target_workers =
+        state_.current_workers;
+
+    return decision;
+}
+
+void SchedulerV2::set_config(
+    const SchedulerV2Config& config)
+{
+    config_ = config;
+
+    if (config_.maximum_workers == 0) {
+        config_.maximum_workers = 1;
+    }
+
+    if (state_.current_workers == 0) {
+        state_.current_workers = 1;
+    }
+
+    if (state_.current_workers >
+        config_.maximum_workers) {
+
+        state_.current_workers =
+            config_.maximum_workers;
+    }
+}
+
+}
