@@ -80,3 +80,5 @@ profiling/results/*.data
 docker/config/.env.production
 
 *.env
+
+build-ucrt64/
