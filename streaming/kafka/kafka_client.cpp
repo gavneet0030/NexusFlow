@@ -1,4 +1,4 @@
-﻿#include "kafka_client.hpp"
+#include "kafka_client.hpp"
 
 #include <rdkafkacpp.h>
 

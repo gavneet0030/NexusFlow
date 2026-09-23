@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.20)
 
 project(NexusFlowStreaming LANGUAGES CXX)
 
@@ -19,7 +19,25 @@ if(UNIX AND NOT WIN32)
 
 else()
 
-    find_package(RdKafka CONFIG REQUIRED)
+    # MSYS2 UCRT64 Windows dependency stack.
+    # librdkafka provides its CMake package under the UCRT64 prefix.
+    set(NEXUSFLOW_UCRT64_PREFIX "C:/msys64/ucrt64")
+
+    list(APPEND CMAKE_PREFIX_PATH
+        "${NEXUSFLOW_UCRT64_PREFIX}"
+    )
+
+    list(APPEND CMAKE_MODULE_PATH
+        "${NEXUSFLOW_UCRT64_PREFIX}/lib/cmake/RdKafka"
+    )
+
+    find_package(RdKafka CONFIG REQUIRED
+        PATHS
+            "${NEXUSFLOW_UCRT64_PREFIX}/lib/cmake/RdKafka"
+        NO_DEFAULT_PATH
+    )
+
+    message(STATUS "NEXUSFLOW STREAMING: Windows MSYS2 UCRT64 librdkafka")
 
 endif()
 

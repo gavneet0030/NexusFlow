@@ -12,7 +12,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 include(CTest)
 
-add_subdirectory(core)
+add_subdirectory(core)
+
 add_subdirectory(streaming)
 add_subdirectory(api/grpc)
 add_executable(scheduler_benchmark
@@ -912,9 +913,11 @@ if(NEXUSFLOW_RDKAFKA_INCLUDE_DIR
     )
 
     target_include_directories(nexusflow_kafka
-        PUBLIC
+        SYSTEM PUBLIC
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${NEXUSFLOW_RDKAFKA_INCLUDE_DIR}
+            C:/msys64/ucrt64/include
+            C:/msys64/ucrt64/include/librdkafka
     )
 
     target_link_libraries(nexusflow_kafka
