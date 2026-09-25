@@ -1,4 +1,4 @@
-add_library(nexusflow_prometheus
+﻿add_library(nexusflow_prometheus
     src/prometheus_metrics.cpp
     src/metrics_http_server.cpp
 )
@@ -16,10 +16,12 @@ if (MSVC)
     target_compile_options(nexusflow_prometheus
         PRIVATE /W4
     )
+endif()
 
+if (WIN32)
     target_link_libraries(nexusflow_prometheus
         PRIVATE
-            $<$<PLATFORM_ID:Windows>:ws2_32>
+            ws2_32
     )
 endif()
 
@@ -49,3 +51,4 @@ target_link_libraries(metrics_http_server_test
 target_compile_features(metrics_http_server_test
     PRIVATE cxx_std_20
 )
+

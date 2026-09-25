@@ -893,7 +893,10 @@ add_test(
 # NexusFlow Kafka streaming client
 find_path(NEXUSFLOW_RDKAFKA_INCLUDE_DIR
     NAMES rdkafkacpp.h
-    PATHS /usr/include/librdkafka
+    PATHS
+        /usr/include/librdkafka
+        /usr/local/include/librdkafka
+        C:/msys64/ucrt64/include/librdkafka
 )
 
 find_library(NEXUSFLOW_RDKAFKA_CPP_LIBRARY
