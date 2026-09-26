@@ -816,6 +816,7 @@ target_link_libraries(
 add_test(
     NAME unified_decision_pipeline_test
     COMMAND unified_decision_pipeline_test
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
 
 # ============================================================

@@ -84,7 +84,12 @@ int main() {
         "nexusflow-events";
 
     const std::string group =
-        "nexusflow-cpp-integration-test";
+        "nexusflow-cpp-integration-test-" +
+        std::to_string(
+            std::chrono::steady_clock::now()
+                .time_since_epoch()
+                .count()
+        );
 
     std::cout
         << "============================================================\n"
@@ -193,7 +198,16 @@ int main() {
                     << message.payload
                     << "\n";
 
-                return 1;
+                continue;
+            }
+
+
+            if (id < 0 || id >= event_count) {
+                std::cerr
+                    << "IGNORING UNEXPECTED EVENT ID: "
+                    << id
+                    << "\n";
+                continue;
             }
 
             received_ids.insert(id);
