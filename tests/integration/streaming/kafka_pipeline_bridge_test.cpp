@@ -1,4 +1,4 @@
-#include "streaming/kafka_consumer/kafka_consumer_adapter.hpp"
+﻿#include "streaming/kafka_consumer/kafka_consumer_adapter.hpp"
 #include "streaming/kafka_consumer/kafka_pipeline_bridge.hpp"
 
 #include "core/event/event.hpp"
@@ -6,7 +6,7 @@
 #include "core/workers/adaptive_worker_pool.hpp"
 
 #include <atomic>
-#include <cassert>
+
 #include <chrono>
 #include <cstdint>
 #include <iostream>
@@ -52,21 +52,41 @@ int main() {
         std::to_string(unique_suffix);
 
     KafkaConsumerAdapter consumer(
-        "localhost:9092",
+        "localhost:19092",
         "nexusflow.bridge.test.20260913064317225",
         group_id
     );
 
-    assert(consumer.connect());
-    assert(consumer.is_connected());
+    if (!consumer.connect()) {
+        std::cerr << "KAFKA CONSUMER CONNECTION: FAIL" << std::endl;
+        pipeline.stop();
+        return 1;
+    }
+    if (!consumer.is_connected()) {
+        std::cerr << "KAFKA CONSUMER CONNECTED STATE: FAIL" << std::endl;
+        consumer.disconnect();
+        pipeline.stop();
+        return 1;
+    }
 
     KafkaPipelineBridge bridge(
         consumer,
         queue
     );
 
-    assert(bridge.start());
-    assert(bridge.is_running());
+    if (!bridge.start()) {
+        std::cerr << "KAFKA PIPELINE BRIDGE START: FAIL" << std::endl;
+        consumer.disconnect();
+        pipeline.stop();
+        return 1;
+    }
+    if (!bridge.is_running()) {
+        std::cerr << "KAFKA PIPELINE BRIDGE RUNNING STATE: FAIL" << std::endl;
+        bridge.stop();
+        consumer.disconnect();
+        pipeline.stop();
+        return 1;
+    }
 
     std::this_thread::sleep_for(
         std::chrono::milliseconds(2000)
@@ -94,7 +114,17 @@ int main() {
                 payload
             );
 
-        assert(produced);
+        if (!produced) {
+            std::cerr
+                << "KAFKA PRODUCER: FAIL at event "
+                << i
+                << std::endl;
+
+            bridge.stop();
+            pipeline.stop();
+            consumer.disconnect();
+            return 1;
+        }
     }
 
     const auto deadline =
@@ -165,15 +195,69 @@ int main() {
         << "Pipeline processed: "
         << completed
         << "\n";
+    const bool received_ok =
+        received >= event_count;
 
-    assert(received >= event_count);
-    assert(submitted >= event_count);
-    assert(rejected == 0);
-    assert(completed >= event_count);
+    const bool submitted_ok =
+        submitted >= event_count;
 
-    std::cout << "\n";
+    const bool rejected_ok =
+        rejected == 0;
+
+    const bool completed_ok =
+        completed >= event_count;
+
+    if (!received_ok) {
+        std::cerr
+            << "KAFKA RECEIVED COUNT: FAIL"
+            << " expected >= "
+            << event_count
+            << ", actual = "
+            << received
+            << std::endl;
+    }
+
+    if (!submitted_ok) {
+        std::cerr
+            << "QUEUE SUBMITTED COUNT: FAIL"
+            << " expected >= "
+            << event_count
+            << ", actual = "
+            << submitted
+            << std::endl;
+    }
+
+    if (!rejected_ok) {
+        std::cerr
+            << "QUEUE REJECTED COUNT: FAIL"
+            << " expected = 0, actual = "
+            << rejected
+            << std::endl;
+    }
+
+    if (!completed_ok) {
+        std::cerr
+            << "PIPELINE COMPLETED COUNT: FAIL"
+            << " expected >= "
+            << event_count
+            << ", actual = "
+            << completed
+            << std::endl;
+    }
+
+    if (!received_ok ||
+        !submitted_ok ||
+        !rejected_ok ||
+        !completed_ok) {
+        std::cerr
+            << "KAFKA -> QUEUE -> ADAPTIVE PIPELINE: FAIL"
+            << std::endl;
+        return 1;
+    }
+std::cout << "\n";
     std::cout
         << "KAFKA -> QUEUE -> ADAPTIVE PIPELINE: PASS\n";
 
     return 0;
 }
+

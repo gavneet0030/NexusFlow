@@ -1,6 +1,6 @@
-#include "kafka_consumer/kafka_consumer_adapter.hpp"
+﻿#include "kafka_consumer/kafka_consumer_adapter.hpp"
 
-#include <cassert>
+
 #include <chrono>
 #include <iostream>
 #include <string>
@@ -11,13 +11,20 @@ int main() {
     using namespace nexusflow::streaming;
 
     KafkaConsumerAdapter kafka(
-        "localhost:9092",
+        "localhost:19092",
         "nexusflow.events",
         "nexusflow-cpp-integration"
     );
 
-    assert(kafka.connect());
-    assert(kafka.is_connected());
+    if (!kafka.connect()) {
+        std::cerr << "C++ KAFKA CONNECTION: FAIL" << std::endl;
+        return 1;
+    }
+    if (!kafka.is_connected()) {
+        std::cerr << "C++ KAFKA CONNECTED STATE: FAIL" << std::endl;
+        kafka.disconnect();
+        return 1;
+    }
 
     std::cout
         << "C++ KAFKA CONNECTION: PASS"
@@ -48,7 +55,11 @@ int main() {
         );
     }
 
-    assert(produced);
+    if (!produced) {
+        std::cerr << "REAL C++ KAFKA PRODUCER: FAIL" << std::endl;
+        kafka.disconnect();
+        return 1;
+    }
 
     std::cout
         << "REAL C++ KAFKA PRODUCER: PASS"
@@ -79,7 +90,11 @@ int main() {
         }
     }
 
-    assert(received);
+    if (!received) {
+        std::cerr << "REAL C++ KAFKA CONSUMER: FAIL" << std::endl;
+        kafka.disconnect();
+        return 1;
+    }
 
     std::cout
         << "REAL C++ KAFKA CONSUMER: PASS"
@@ -97,7 +112,10 @@ int main() {
 
     kafka.disconnect();
 
-    assert(!kafka.is_connected());
+    if (kafka.is_connected()) {
+        std::cerr << "C++ KAFKA DISCONNECT: FAIL" << std::endl;
+        return 1;
+    }
 
     std::cout
         << "C++ END-TO-END STREAM: PASS"
@@ -105,3 +123,4 @@ int main() {
 
     return 0;
 }
+
