@@ -633,6 +633,9 @@ if(BUILD_TESTING)
         NAME adaptive_capacity_sweep_benchmark
         COMMAND adaptive_capacity_sweep_benchmark
     )
+    set_tests_properties(adaptive_capacity_sweep_benchmark PROPERTIES
+        LABELS benchmark
+    )
 endif()
 add_subdirectory(storage/redis)
 
@@ -859,6 +862,7 @@ target_link_libraries(
     nexusflow_service
     PRIVATE
     nexusflow_core
+    nexusflow_grpc_service
 )
 
 target_include_directories(
@@ -901,11 +905,13 @@ find_path(NEXUSFLOW_RDKAFKA_INCLUDE_DIR
 )
 
 find_library(NEXUSFLOW_RDKAFKA_CPP_LIBRARY
-    NAMES rdkafka++
+    NAMES rdkafka++ librdkafka++.dll.a
+    PATHS C:/msys64/ucrt64/lib
 )
 
 find_library(NEXUSFLOW_RDKAFKA_LIBRARY
-    NAMES rdkafka
+    NAMES rdkafka librdkafka.dll.a
+    PATHS C:/msys64/ucrt64/lib
 )
 
 if(NEXUSFLOW_RDKAFKA_INCLUDE_DIR

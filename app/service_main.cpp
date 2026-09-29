@@ -5,6 +5,8 @@
 #include <iostream>
 #include <thread>
 
+#include "api/grpc/nexusflow_grpc_server.hpp"
+
 namespace {
 std::atomic<bool> running{true};
 
@@ -34,6 +36,12 @@ int main() {
 
     const int workers = read_positive_env("NEXUSFLOW_WORKERS", 4);
 
+    nexusflow::grpc::NexusFlowGrpcServer grpc_server(
+        "0.0.0.0:8080",
+        4096,
+        static_cast<std::size_t>(workers)
+    );
+
     std::cout << "============================================================\n";
     std::cout << "              NEXUSFLOW KUBERNETES SERVICE\n";
     std::cout << "============================================================\n";
@@ -58,6 +66,13 @@ int main() {
                       ? std::getenv("NEXUSFLOW_TRACING_ENABLED")
                       : "false")
               << '\n';
+
+    if (!grpc_server.start()) {
+        std::cerr << "gRPC server failed to start on 0.0.0.0:8080\n";
+        return 1;
+    }
+
+    std::cout << "gRPC            : 0.0.0.0:8080\n";
     std::cout << "Status          : RUNNING\n";
     std::cout << "============================================================\n";
     std::cout.flush();
@@ -65,11 +80,15 @@ int main() {
     while (running.load(std::memory_order_relaxed)) {
         std::this_thread::sleep_for(std::chrono::seconds(5));
 
-        std::cout << "NexusFlow service heartbeat: RUNNING\n";
-        std::cout.flush();
+        if (running.load(std::memory_order_relaxed)) {
+            std::cout << "NexusFlow service heartbeat: RUNNING\n";
+            std::cout.flush();
+        }
     }
 
     std::cout << "NexusFlow service shutdown requested\n";
+    grpc_server.stop();
+    std::cout << "NexusFlow gRPC server stopped\n";
     std::cout << "NexusFlow service stopped\n";
     std::cout.flush();
 
