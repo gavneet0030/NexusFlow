@@ -15,14 +15,9 @@ if (WIN32)
             "C:/vcpkg/installed/x64-windows/include"
     )
 
-    target_link_directories(nexusflow_postgres
-        PRIVATE
-            "C:/vcpkg/installed/x64-windows/lib"
-    )
-
     target_link_libraries(nexusflow_postgres
         PUBLIC
-            libpq
+            "C:/vcpkg/installed/x64-windows/lib/libpq.lib"
     )
 
 else()
@@ -68,3 +63,18 @@ else()
     message(STATUS "LINUX POSTGRES LIBRARY: ${POSTGRESQL_LIBRARY}")
 
 endif()
+
+# Native PostgreSQL integration test
+add_executable(postgres_store_test
+    ${CMAKE_SOURCE_DIR}/tests/integration/storage/postgres_store_test.cpp
+)
+
+target_link_libraries(postgres_store_test
+    PRIVATE
+        nexusflow_postgres
+)
+
+add_test(
+    NAME postgres_store_test
+    COMMAND postgres_store_test
+)

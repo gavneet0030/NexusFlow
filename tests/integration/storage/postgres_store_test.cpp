@@ -2,13 +2,57 @@
 #include "core/event/event.hpp"
 
 #include <cstdint>
+#include <cstdlib>
 #include <iostream>
 #include <string>
 
 int main() {
     std::cout << "POSTGRES NATIVE INTEGRATION TEST" << std::endl;
 
-    nexusflow::storage::PostgresStore store;
+    const char* host_env = std::getenv("NEXUSFLOW_POSTGRES_HOST");
+    const char* port_env = std::getenv("NEXUSFLOW_POSTGRES_PORT");
+    const char* database_env = std::getenv("NEXUSFLOW_POSTGRES_DATABASE");
+    const char* user_env = std::getenv("NEXUSFLOW_POSTGRES_USER");
+    const char* password_env = std::getenv("NEXUSFLOW_POSTGRES_PASSWORD");
+
+    if (host_env == nullptr ||
+        port_env == nullptr ||
+        database_env == nullptr ||
+        user_env == nullptr ||
+        password_env == nullptr ||
+        std::string(password_env).empty()) {
+        std::cerr
+            << "POSTGRES CONFIG: FAIL - required environment variables missing"
+            << std::endl;
+        return 1;
+    }
+
+    int port = 0;
+
+    try {
+        port = std::stoi(port_env);
+    }
+    catch (...) {
+        std::cerr
+            << "POSTGRES CONFIG: FAIL - invalid NEXUSFLOW_POSTGRES_PORT"
+            << std::endl;
+        return 1;
+    }
+
+    if (port <= 0) {
+        std::cerr
+            << "POSTGRES CONFIG: FAIL - invalid NEXUSFLOW_POSTGRES_PORT"
+            << std::endl;
+        return 1;
+    }
+
+    nexusflow::storage::PostgresStore store(
+        host_env,
+        port,
+        database_env,
+        user_env,
+        password_env
+    );
 
     std::cout << "=== CONNECT ===" << std::endl;
 

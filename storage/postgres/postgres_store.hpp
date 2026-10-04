@@ -11,11 +11,11 @@ namespace nexusflow::storage {
 class PostgresStore {
 public:
     PostgresStore(
-        const std::string& host = "127.0.0.1",
-        int port = 5433,
-        const std::string& database = "frip",
-        const std::string& user = "postgres",
-        const std::string& password = "nexusflow"
+        const std::string& host,
+        int port,
+        const std::string& database,
+        const std::string& user,
+        const std::string& password
     );
 
     ~PostgresStore();
@@ -41,4 +41,6 @@ private:
 };
 
 }
+
+
 
