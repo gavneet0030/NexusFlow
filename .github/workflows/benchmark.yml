@@ -1,0 +1,89 @@
+﻿name: NexusFlow Linux Benchmarks
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: nexusflow-benchmark-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  benchmark:
+    name: Linux Benchmarks
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            cmake \
+            ninja-build \
+            pkg-config \
+            protobuf-compiler \
+            libprotobuf-dev \
+            protobuf-compiler-grpc \
+            libgrpc++-dev \
+            libgrpc-dev \
+            libssl-dev \
+            libcurl4-openssl-dev \
+            libpq-dev \
+            librdkafka-dev \
+            libhiredis-dev \
+            uuid-dev
+
+      - name: Show toolchain versions
+        run: |
+          cmake --version
+          ninja --version
+          g++ --version
+          protoc --version
+
+      - name: Configure CMake
+        run: |
+          cmake -S . -B build/ci \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build NexusFlow
+        run: |
+          cmake --build build/ci \
+            --config Release \
+            --parallel
+
+      - name: Discover benchmark tests
+        shell: bash
+        run: |
+          set -e
+          ctest --test-dir build/ci -N -L benchmark
+          ctest --test-dir build/ci -N -L benchmark | grep -F 'adaptive_capacity_sweep_benchmark'
+
+      - name: Run benchmark tests
+        shell: bash
+        run: |
+          set -e
+          ctest \
+            --test-dir build/ci \
+            --output-on-failure \
+            --build-config Release \
+            -R '^adaptive_capacity_sweep_benchmark$'
+      - name: Upload benchmark artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nexusflow-benchmark-artifacts
+          path: |
+            build/ci/Testing
+            build/ci/benchmark_results
+            artifacts
+          if-no-files-found: ignore

@@ -1,9 +1,10 @@
-﻿#include "kafka_consumer_adapter.hpp"
+#include "kafka_consumer_adapter.hpp"
 
 #include <librdkafka/rdkafka.h>
 
 #include <cstdint>
 #include <memory>
+#include <mutex>
 #include <chrono>
 #include <string>
 #include <thread>
@@ -15,6 +16,7 @@ class KafkaConsumerAdapter::Impl {
 public:
     rd_kafka_t* producer{nullptr};
     rd_kafka_t* consumer{nullptr};
+    std::mutex mutex;
 };
 
 KafkaConsumerAdapter::KafkaConsumerAdapter(
@@ -53,6 +55,7 @@ bool KafkaConsumerAdapter::decode_message(
 }
 
 bool KafkaConsumerAdapter::connect() {
+    std::lock_guard<std::mutex> lock(impl_->mutex);
 
     char error_buffer[512];
 
@@ -163,6 +166,7 @@ bool KafkaConsumerAdapter::connect() {
 }
 
 void KafkaConsumerAdapter::disconnect() {
+    std::lock_guard<std::mutex> lock(impl_->mutex);
 
     if (impl_->consumer != nullptr) {
         rd_kafka_consumer_close(impl_->consumer);
@@ -219,6 +223,7 @@ bool KafkaConsumerAdapter::poll(
     KafkaEvent& event,
     int timeout_ms
 ) {
+    std::lock_guard<std::mutex> lock(impl_->mutex);
     if (!connected_ || impl_->consumer == nullptr) {
         return false;
     }
@@ -305,6 +310,7 @@ bool KafkaConsumerAdapter::produce_event_async(
     const std::string& key,
     const std::string& payload
 ) {
+    std::lock_guard<std::mutex> lock(impl_->mutex);
     if (!connected_ || impl_->producer == nullptr) {
         return false;
     }
@@ -332,6 +338,7 @@ bool KafkaConsumerAdapter::produce_event_async(
 }
 
 bool KafkaConsumerAdapter::flush_producer(int timeout_ms) {
+    std::lock_guard<std::mutex> lock(impl_->mutex);
     if (!connected_ || impl_->producer == nullptr) {
         return false;
     }

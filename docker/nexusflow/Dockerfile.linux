@@ -51,14 +51,14 @@ RUN mkdir -p /src/observability/opentelemetry/generated && \
     test -f /src/observability/opentelemetry/generated/trace_service.pb.h && \
     echo "LINUX OTLP PROTOBUF GENERATION: PASS"
 
-RUN git clone --depth 1 --branch 1.3.15 https://github.com/sewenew/redis-plus-plus.git /tmp/redis-plus-plus && \
-    cmake -S /tmp/redis-plus-plus -B /tmp/redis-plus-plus/build \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DREDIS_PLUS_PLUS_BUILD_TEST=OFF \
-        -DCMAKE_INSTALL_PREFIX=/usr/local && \
-    cmake --build /tmp/redis-plus-plus/build --parallel && \
-    cmake --install /tmp/redis-plus-plus/build && \
+COPY .nexusflow/deps/redis-plus-plus-1.3.15/include/ /usr/local/include/
+COPY .nexusflow/deps/redis-plus-plus-1.3.15/generated/hiredis_features.h /usr/local/include/sw/redis++/hiredis_features.h
+COPY docker/nexusflow/redis/libredis++.so.1.3.15 /usr/local/lib/libredis++.so.1.3.15
+
+RUN ln -sf /usr/local/lib/libredis++.so.1.3.15 /usr/local/lib/libredis++.so.1 && \
+    ln -sf /usr/local/lib/libredis++.so.1 /usr/local/lib/libredis++.so && \
     ldconfig
+
 
 RUN mkdir -p /src/build-linux && \
     cmake -S /src -B /src/build-linux \
@@ -66,7 +66,7 @@ RUN mkdir -p /src/build-linux && \
         -DCMAKE_BUILD_TYPE=Release \
         -DNEXUSFLOW_BUILD_TESTS=OFF \
         -DCMAKE_PREFIX_PATH="/usr/lib/x86_64-linux-gnu/cmake/protobuf;/usr/lib/x86_64-linux-gnu/cmake/grpc;/usr/lib/x86_64-linux-gnu/cmake/absl" && \
-    cmake --build /src/build-linux --parallel && \
+    cmake --build /src/build-linux --target nexusflow nexusflow_service --parallel && \
     NEXUSFLOW_BIN="$(find /src/build-linux -type f -name nexusflow -print -quit)" && \
     NEXUSFLOW_SERVICE_BIN="$(find /src/build-linux -type f -name nexusflow_service -print -quit)" && \
     test -n "$NEXUSFLOW_BIN" && \
@@ -115,6 +115,8 @@ WORKDIR /app
 EXPOSE 8080 9100
 
 ENTRYPOINT ["/app/nexusflow_service"]
+
+
 
 
 

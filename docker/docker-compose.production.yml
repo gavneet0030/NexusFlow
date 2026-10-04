@@ -76,9 +76,9 @@
     environment:
       POSTGRES_DB: frip
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: CHANGE_ME
+      POSTGRES_PASSWORD: QLf1nr4GZ3NefaQTWj_a9ITtreFd1pU3
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
