@@ -4,28 +4,26 @@
 
 ### Adaptive Real-Time Event Processing & Intelligent Decision Infrastructure
 
+<p><strong>From high-throughput event ingestion to workload-aware processing, measurable performance, and intelligent decisions.</strong></p>
+
 <p>
-  <strong>High-performance systems engineering · Adaptive scheduling · Event-driven architecture · Real-time intelligence</strong>
+<a href="https://github.com/gavneet0030/NexusFlow"><img src="https://img.shields.io/badge/Project-NexusFlow-2563eb?style=for-the-badge" alt="NexusFlow project"></a>
+<a href="https://isocpp.org/"><img src="https://img.shields.io/badge/C%2B%2B-20-00599C?style=for-the-badge&logo=cplusplus&logoColor=white" alt="C++20"></a>
+<a href="https://cmake.org/"><img src="https://img.shields.io/badge/Build-CMake-064F8C?style=for-the-badge&logo=cmake&logoColor=white" alt="CMake"></a>
+<a href="https://www.docker.com/"><img src="https://img.shields.io/badge/Containers-Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"></a>
+<a href="https://kubernetes.io/"><img src="https://img.shields.io/badge/Orchestration-Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white" alt="Kubernetes"></a>
 </p>
 
 <p>
-  <a href="https://github.com/gavneet0030/NexusFlow"><img src="https://img.shields.io/badge/Project-NexusFlow-2563eb?style=for-the-badge" alt="NexusFlow"></a>
-  <a href="https://isocpp.org/"><img src="https://img.shields.io/badge/Language-C%2B%2B20-00599C?style=for-the-badge&logo=cplusplus&logoColor=white" alt="C++20"></a>
-  <a href="https://cmake.org/"><img src="https://img.shields.io/badge/Build-CMake-064F8C?style=for-the-badge&logo=cmake&logoColor=white" alt="CMake"></a>
-  <a href="https://www.docker.com/"><img src="https://img.shields.io/badge/Containers-Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"></a>
-  <a href="https://kubernetes.io/"><img src="https://img.shields.io/badge/Orchestration-Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white" alt="Kubernetes"></a>
+<a href="#-the-vision">Vision</a> ·
+<a href="#-architecture">Architecture</a> ·
+<a href="#-research-and-benchmarks">Benchmarks</a> ·
+<a href="#-live-demo-and-video-showcase">Demo Videos</a> ·
+<a href="#-getting-started">Getting Started</a> ·
+<a href="#-roadmap">Roadmap</a>
 </p>
 
-<p>
-  <a href="#overview">Overview</a> ·
-  <a href="#architecture">Architecture</a> ·
-  <a href="#research-and-benchmarks">Research</a> ·
-  <a href="#getting-started">Getting Started</a> ·
-  <a href="#testing-and-validation">Testing</a> ·
-  <a href="#roadmap">Roadmap</a>
-</p>
-
-**NexusFlow is an engineering project exploring how real-time event-processing systems can adapt their scheduling and processing behavior to changing workloads, queue pressure, event priorities, and latency requirements.**
+**NexusFlow is a C++-based event-processing platform exploring how workload-aware scheduling, concurrent execution, queue management, and measurable performance can improve the engineering of real-time data systems.**
 
 </div>
 
@@ -33,451 +31,380 @@
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [The Problem](#the-problem)
-- [Project Objectives](#project-objectives)
-- [Research and Engineering Approach](#research-and-engineering-approach)
-- [Architecture](#architecture)
-- [End-to-End Event Lifecycle](#end-to-end-event-lifecycle)
-- [Adaptive Scheduling](#adaptive-scheduling)
-- [Technology Stack](#technology-stack)
-- [Benchmarking and Research Results](#research-and-benchmarks)
-- [Real-World Data and Workload Design](#real-world-data-and-workload-design)
-- [Reliability and Failure Handling](#reliability-and-failure-handling)
-- [Observability and Deployment](#observability-and-deployment)
-- [Industry Applications](#industry-applications)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [Testing and Validation](#testing-and-validation)
-- [Performance Evaluation Methodology](#performance-evaluation-methodology)
-- [Security Considerations](#security-considerations)
-- [Limitations and Engineering Trade-offs](#limitations-and-engineering-trade-offs)
-- [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [License](#license)
+- [The Vision](#-the-vision)
+- [The Problem](#-the-problem)
+- [Project Goals](#-project-goals)
+- [Architecture](#-architecture)
+- [End-to-End Event Lifecycle](#-end-to-end-event-lifecycle)
+- [Adaptive Scheduling Engine](#-adaptive-scheduling-engine)
+- [Progressive Intelligence Architecture](#-progressive-intelligence-architecture)
+- [Technology Stack](#-technology-stack)
+- [Research and Benchmarks](#-research-and-benchmarks)
+- [Real-World Data and Workload Design](#-real-world-data-and-workload-design)
+- [Live Demo and Video Showcase](#-live-demo-and-video-showcase)
+- [Reliability and Fault Tolerance](#-reliability-and-fault-tolerance)
+- [Observability and Deployment](#-observability-and-deployment)
+- [Industry Applications](#-industry-applications)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [Testing and Validation](#-testing-and-validation)
+- [Performance Engineering Methodology](#-performance-engineering-methodology)
+- [Security](#-security)
+- [Engineering Trade-offs and Current Limitations](#-engineering-trade-offs-and-current-limitations)
+- [Roadmap](#-roadmap)
+- [Release Readiness](#-release-readiness)
+- [Contributing](#-contributing)
+- [License](#-license)
 
 ---
 
-## Overview
+## 🚀 The Vision
 
-Modern applications continuously produce events: transactions, application logs, telemetry measurements, security alerts, user interactions, inventory updates, and operational signals.
+Modern digital systems continuously generate events: financial transactions, security alerts, retail orders, infrastructure telemetry, user activity, and industrial sensor readings.
 
-Processing these events efficiently requires more than simply receiving messages and executing business logic. A robust system must also manage concurrency, queue growth, workload variability, event priorities, backpressure, processing latency, and failures.
+The challenge is not simply to receive these events. A robust system must process them correctly, control queue growth, manage concurrency, respond to changing workloads, preserve important events, and provide measurable evidence of its behavior.
 
-**NexusFlow investigates these challenges through an adaptive event-processing architecture built around a C++ processing engine.**
+**NexusFlow aims to turn event processing into an observable, workload-aware, and experimentally verifiable engineering system.**
 
-The project combines systems-level programming with experimental performance evaluation. Rather than relying exclusively on theoretical claims, it uses controlled workload experiments, scheduler comparisons, event-integrity checks, and end-to-end latency measurements to study system behavior under different operating conditions.
+The long-term vision is to develop a platform that connects:
 
-### Core engineering themes
+- High-performance C++ event processing.
+- Adaptive scheduling and concurrent execution.
+- Streaming ingestion and backpressure management.
+- Rule-based and intelligent event analysis.
+- Risk assessment and decision generation.
+- Analytical persistence and downstream integration.
+- Metrics, traces, and reproducible performance experiments.
+- Containerized deployment and operational validation.
 
-<table>
-<thead>
-<tr>
-<th>Area</th>
-<th>Objective</th>
-<th>Engineering question</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Event ingestion</strong></td>
-<td>Accept and process incoming event streams.</td>
-<td>How does the system behave as incoming load increases?</td>
-</tr>
-<tr>
-<td><strong>Concurrency</strong></td>
-<td>Coordinate processing workers and shared queues.</td>
-<td>How can parallelism be used without compromising correctness?</td>
-</tr>
-<tr>
-<td><strong>Adaptive scheduling</strong></td>
-<td>Evaluate processing modes and workload signals.</td>
-<td>When should the engine use individual, batched, or parallel processing?</td>
-</tr>
-<tr>
-<td><strong>Backpressure</strong></td>
-<td>Manage pressure when arrival rates exceed service capacity.</td>
-<td>How does queue growth affect throughput and latency?</td>
-</tr>
-<tr>
-<td><strong>Performance research</strong></td>
-<td>Measure throughput, latency, and event integrity.</td>
-<td>Which operating conditions produce acceptable performance?</td>
-</tr>
-<tr>
-<td><strong>Operational engineering</strong></td>
-<td>Explore containerization, service health, and deployment.</td>
-<td>What additional validation is required for reliable deployment?</td>
-</tr>
-</tbody>
-</table>
+NexusFlow is being developed as a progressive engineering project. Its capabilities will be expanded and verified in stages rather than assuming that every designed integration is already complete.
 
-> **Project status:** NexusFlow is an evolving systems-engineering and research project. Reported benchmark experiments are historical measurements, not a guarantee of current performance. A fully production-validated deployment has not been established.
+### What makes the project interesting?
+
+| Engineering dimension | Focus |
+|---|---|
+| Systems programming | C++ execution paths, worker lifecycle, queues, and resource management. |
+| Performance engineering | Throughput, tail latency, queue waiting, saturation, and benchmark reproducibility. |
+| Adaptive processing | Comparing processing modes using workload signals and scheduling policies. |
+| Distributed systems | Streaming ingestion, service communication, persistence, and failure semantics. |
+| Intelligent decisions | A future integration path for event analysis, risk scoring, and explainable outcomes. |
+| Cloud-native engineering | Containers, Kubernetes resources, health checks, and operational observability. |
+| Research discipline | Controlled experiments, event-integrity checks, and transparent reporting of limitations. |
 
 ---
 
-## The Problem
+## 🎯 The Problem
 
-Traditional event-processing implementations often start with a fixed processing strategy. This may work for predictable workloads but can become inefficient when event arrival rates, processing costs, and priority distributions change.
+Fixed processing strategies can work well under predictable conditions. However, real workloads are often bursty, uneven, and time-sensitive.
 
-### 1. Fixed processing strategies
+### 1. Fixed execution strategies
 
-A single-threaded pipeline is straightforward but may not use available processing capacity effectively. A parallel pipeline can improve throughput, but introduces coordination overhead and additional correctness requirements.
+A single-threaded pipeline is relatively straightforward, but it may leave processing capacity unused. Parallel execution can increase throughput, but introduces synchronization, coordination, and contention costs.
 
 ### 2. Queue saturation
 
-When the event arrival rate exceeds the sustainable processing rate, queues grow. This can increase waiting time, consume memory, and eventually cause rejected or delayed events.
+When events arrive faster than the system can process them, queues grow. Waiting time increases, memory consumption rises, and overload can lead to delayed or rejected work.
 
-### 3. Throughput versus latency
+### 3. Throughput is not the whole story
 
-A configuration that maximizes throughput may not provide acceptable tail latency. Systems must measure both rather than treating throughput as the only performance objective.
+A system can report high throughput while delivering unacceptable P95 or P99 latency. Average latency alone can hide severe delays experienced by a portion of events.
 
 ### 4. Workload variability
 
-Real event streams are rarely perfectly uniform. Bursts, uneven event costs, and high-priority messages can change the most appropriate processing strategy.
+Different workloads may benefit from different processing strategies. Event size, processing cost, arrival rate, queue depth, and event priority can all affect performance.
 
-### 5. Reliability and operational complexity
+### 5. Correctness across the pipeline
 
-A functioning event-processing loop does not automatically establish reliable operation. Ingestion, persistence, health reporting, recovery, deployment configuration, and monitoring must also be validated.
+Receiving a message does not prove that it was processed correctly or persisted successfully. Every stage needs explicit accounting and appropriate failure handling.
 
-### The central research question
+### The central engineering question
 
-**Can a workload-aware processing architecture make more informed scheduling decisions than a fixed processing strategy while preserving event integrity and making its performance measurable?**
+> Can a workload-aware processing architecture make more informed scheduling decisions than a fixed strategy while preserving event integrity and providing measurable evidence of its behavior?
 
-NexusFlow approaches this question through implementation, controlled experiments, and explicit reporting of limitations.
-
----
-
-## Project Objectives
-
-The project is designed around the following objectives:
-
-- Build a modular event-processing engine in modern C++.
-- Explore bounded queues, worker coordination, and concurrent execution.
-- Evaluate individual-event, micro-batch, and parallel processing modes.
-- Incorporate workload signals such as queue depth, arrival rate, event priority, and latency budgets into scheduling decisions.
-- Investigate backpressure and behavior near saturation.
-- Measure throughput, percentile latency, queue waiting time, and event-processing integrity.
-- Integrate event-streaming infrastructure such as Kafka-compatible brokers.
-- Develop service interfaces and supporting storage integrations.
-- Explore containerized deployment, service health checks, and operational observability.
-- Maintain a clear distinction between implementation, measured evidence, and future engineering work.
-
-The intended outcome is not merely a message consumer. It is an experimentally evaluated processing system whose behavior can be inspected, measured, and improved.
+NexusFlow investigates this question through implementation, controlled experiments, and iterative validation.
 
 ---
 
-## Research and Engineering Approach
+## 🧭 Project Goals
 
-NexusFlow follows an iterative systems-engineering process.
+The project aims to:
 
-<ol>
-<li><strong>Define the workload.</strong> Specify offered event rates, event counts, priorities, and processing characteristics.</li>
-<li><strong>Establish baseline modes.</strong> Evaluate different processing strategies under comparable conditions.</li>
-<li><strong>Instrument the pipeline.</strong> Record throughput, end-to-end latency, queue waiting time, and event-integrity indicators.</li>
-<li><strong>Run controlled experiments.</strong> Vary offered load and processing configuration while preserving the experimental parameters.</li>
-<li><strong>Identify saturation behavior.</strong> Examine when increasing offered load stops producing proportional throughput gains.</li>
-<li><strong>Analyze the results.</strong> Compare operating points, tail latency, and the limitations of the available repetitions.</li>
-<li><strong>Validate correctness separately.</strong> Check event accounting and integration behavior independently of performance.</li>
-<li><strong>Improve and repeat.</strong> Use measured bottlenecks to guide subsequent engineering changes.</li>
-</ol>
+- Build a modular event-processing engine using modern C++.
+- Evaluate individual-event, micro-batch, and parallel execution modes.
+- Explore workload-aware scheduling using queue depth, arrival rate, event priority, and latency budgets.
+- Measure throughput, P50/P95/P99 latency, queue waiting time, and processing integrity.
+- Investigate overload behavior, queue saturation, and backpressure.
+- Integrate streaming infrastructure and service interfaces.
+- Validate worker shutdown, event accounting, and recovery behavior.
+- Explore intelligent event analysis and downstream decision systems.
+- Develop reproducible performance experiments with documented methodology.
+- Package and validate the system through containers and cloud-native deployment configurations.
 
-### Design principles
-
-- **Measurement before optimization:** performance claims should be tied to reproducible experiments.
-- **Correctness before speed:** throughput is meaningful only when event accounting is trustworthy.
-- **Explicit trade-offs:** batching, concurrency, queue capacity, and scheduling all introduce costs.
-- **Modularity:** processing, ingestion, service interfaces, persistence, and deployment should remain independently inspectable.
-- **Evidence-based reporting:** incomplete integrations and unverified behavior must remain visible.
-- **Reproducibility:** workload parameters, run counts, and measurement definitions should accompany published results.
+The objective is not to claim that every technique is automatically superior. It is to implement, measure, compare, and improve the system based on evidence.
 
 ---
 
-## Architecture
+## 🏗️ Architecture
 
-NexusFlow is organized around an event-processing core with supporting ingestion, decision-processing, storage, and operational components.
+NexusFlow is organized around a C++ processing core, with supporting ingestion, scheduling, decision, storage, and operational components.
 
-The architecture below represents the **intended system-level design**. Individual integrations must be evaluated against their current implementation and runtime tests; the diagram does not imply that every external component is already connected end to end.
+The following diagrams describe the **target system architecture**. They distinguish the intended end-to-end design from the individual integrations that still require verification.
 
-### High-level architecture
+### 1. High-level system architecture
 
 ```mermaid
 flowchart TB
-    SRC["Event Producers<br/>Applications · Services · Devices"]
-    BROKER["Streaming Ingestion<br/>Kafka-compatible broker"]
-    ADAPTER["Ingestion Adapter<br/>Message conversion and validation"]
-    CORE["NexusFlow Core<br/>C++ Event Processing Engine"]
-    QUEUE["Bounded Event Queue<br/>Queue Pressure and Backpressure"]
-    SCHED["Adaptive Scheduler<br/>Priority · Arrival Rate · Queue Depth"]
-    WORKERS["Worker Pool<br/>Concurrent Event Processing"]
-    DECISION["Decision and Intelligence Layer<br/>Rules · Risk · Anomaly Analysis"]
-    STORAGE["Persistence Layer<br/>Redis · PostgreSQL"]
-    API["Service Interface<br/>gRPC / TCP"]
-    OBS["Operational Visibility<br/>Metrics · Logs · Traces"]
-    DEPLOY["Runtime Infrastructure<br/>Docker · Kubernetes"]
+    PRODUCERS["Event Producers<br/>Applications · Services · Devices"]
+    BROKER["Streaming Layer<br/>Kafka-compatible Broker"]
+    INGEST["Ingestion Adapter<br/>Validation and Normalization"]
+    CORE["NexusFlow Core<br/>C++ Event Processing"]
+    QUEUE["Bounded Queue<br/>Buffering and Backpressure"]
+    SCHEDULER["Adaptive Scheduler<br/>Workload Signals and Policy"]
+    WORKERS["Worker Pool<br/>Concurrent Execution"]
+    INTELLIGENCE["Intelligence Layer<br/>Rules · Risk · Anomaly Analysis"]
+    SENTINEL["SentinelX<br/>Planned Security and Risk Integration"]
+    ATLAS["AtlasDB<br/>Planned Analytical Storage Integration"]
+    STORAGE["Operational Persistence<br/>Redis · PostgreSQL"]
+    API["Service Interfaces<br/>gRPC / TCP"]
+    OBS["Observability<br/>Metrics · Logs · Traces"]
+    INFRA["Runtime Infrastructure<br/>Docker · Kubernetes"]
 
-    SRC --> BROKER
-    BROKER --> ADAPTER
-    ADAPTER --> CORE
+    PRODUCERS --> BROKER
+    BROKER --> INGEST
+    INGEST --> CORE
     CORE --> QUEUE
-    QUEUE --> SCHED
-    SCHED --> WORKERS
-    WORKERS --> DECISION
-    DECISION --> STORAGE
-    DECISION --> API
-    CORE -. "Operational signals" .-> OBS
-    WORKERS -. "Processing signals" .-> OBS
-    STORAGE -. "Runtime signals" .-> OBS
-    DEPLOY -. "Runs and manages services" .-> CORE
-    DEPLOY -. "Runs supporting components" .-> BROKER
-    DEPLOY -. "Hosts operational tooling" .-> OBS
+    QUEUE --> SCHEDULER
+    SCHEDULER --> WORKERS
+    WORKERS --> INTELLIGENCE
+    INTELLIGENCE --> STORAGE
+    INTELLIGENCE --> API
+    INTELLIGENCE -. "Future risk and security workflows" .-> SENTINEL
+    INTELLIGENCE -. "Future analytical data workflows" .-> ATLAS
+
+    CORE -.-> OBS
+    WORKERS -.-> OBS
+    STORAGE -.-> OBS
+
+    INFRA -. "Runs and manages services" .-> CORE
+    INFRA -.-> BROKER
+    INFRA -.-> OBS
 ```
 
-### Architectural layers
+### 2. Architecture layers
 
-<table>
-<thead>
-<tr>
-<th>Layer</th>
-<th>Responsibility</th>
-<th>Key considerations</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Event producers</strong></td>
-<td>Generate transactions, telemetry, alerts, or application events.</td>
-<td>Arrival-rate variability, event schemas, duplicate delivery.</td>
-</tr>
-<tr>
-<td><strong>Ingestion adapter</strong></td>
-<td>Receive messages and translate them into internal events.</td>
-<td>Validation, acknowledgements, delivery semantics, error handling.</td>
-</tr>
-<tr>
-<td><strong>Processing core</strong></td>
-<td>Coordinate event processing and runtime execution.</td>
-<td>Correctness, concurrency, lifecycle management.</td>
-</tr>
-<tr>
-<td><strong>Queue and backpressure</strong></td>
-<td>Buffer work and expose processing pressure.</td>
-<td>Capacity, blocking behavior, overload policy.</td>
-</tr>
-<tr>
-<td><strong>Scheduler and workers</strong></td>
-<td>Select processing modes and execute work.</td>
-<td>Scheduling overhead, fairness, worker utilization.</td>
-</tr>
-<tr>
-<td><strong>Decision layer</strong></td>
-<td>Apply business rules or intelligence models.</td>
-<td>Decision quality, execution cost, explainability.</td>
-</tr>
-<tr>
-<td><strong>Persistence and interfaces</strong></td>
-<td>Support state storage and service access.</td>
-<td>Durability, consistency, latency, error handling.</td>
-</tr>
-<tr>
-<td><strong>Operations</strong></td>
-<td>Support deployment, health checks, and system visibility.</td>
-<td>Resource limits, security, observability, recovery.</td>
-</tr>
-</tbody>
-</table>
+| Layer | Responsibility | Key engineering concerns |
+|---|---|---|
+| Event producers | Generate incoming events. | Event schemas, bursts, duplicate messages. |
+| Streaming ingestion | Receive and deliver event messages. | Acknowledgements, retries, delivery semantics. |
+| Processing core | Coordinate event execution. | Correctness, lifecycle management, concurrency. |
+| Queue and backpressure | Buffer pending work. | Capacity, queue pressure, overload policy. |
+| Adaptive scheduler | Select processing modes and dispatch work. | Scheduling overhead, fairness, policy stability. |
+| Worker pool | Execute events. | Synchronization, utilization, shutdown. |
+| Intelligence layer | Apply processing and decision logic. | Processing cost, decision quality, explainability. |
+| Persistence | Store supported state and outputs. | Durability, consistency, retries, failure handling. |
+| Service interfaces | Expose selected functionality. | API contracts, timeouts, availability. |
+| Observability | Expose runtime behavior. | Metric accuracy, trace coverage, actionable alerts. |
+| Deployment infrastructure | Run and manage services. | Security, resources, health, recovery. |
 
-### Integration boundaries
-
-NexusFlow's wider design includes streaming ingestion, service interfaces, storage, and deployment tooling. A component's presence in the repository or deployment configuration is not, by itself, proof of successful runtime integration.
-
-In particular, full pipeline validation must establish that an event can enter the system, be processed, produce the expected outcome, and be accounted for correctly at the final boundary.
-
----
-
-## End-to-End Event Lifecycle
-
-The intended event lifecycle is:
+### 3. Event-processing lifecycle
 
 ```mermaid
 sequenceDiagram
     autonumber
     participant P as Producer
-    participant B as Broker / Ingestion
+    participant B as Streaming Broker
     participant Q as Event Queue
-    participant S as Adaptive Scheduler
-    participant W as Worker Pool
+    participant S as Scheduler
+    participant W as Workers
     participant D as Decision Logic
     participant DB as Storage / Consumer
+    participant M as Metrics
 
     P->>B: Publish event
-    B->>Q: Deliver and validate event
-    Q->>S: Expose queued work
+    B->>Q: Deliver event
+    Q->>S: Expose pending work
     S->>S: Evaluate workload signals
-    S->>W: Dispatch processing work
+    S->>W: Dispatch processing
     W->>D: Execute event logic
     D->>DB: Persist or publish outcome
     DB-->>D: Result / acknowledgement
     D-->>W: Processing result
-    W-->>Q: Complete work and update accounting
+    W->>M: Record processing outcome
+    S->>M: Record queue and scheduling signals
 ```
 
-This sequence describes the target flow, not a claim that every arrow has already been proven in a single end-to-end deployment.
+This is the intended flow. A complete integration test must verify the actual path through the running system, including output validation and event accounting.
 
-### Event-processing stages
+### 4. Architectural boundaries
 
-1. **Ingestion:** receive a message from a producer or supported input adapter.
-2. **Validation:** check the event representation and required fields.
-3. **Queueing:** place accepted work into the processing pipeline.
-4. **Scheduling:** choose an available processing mode according to configured signals and policy.
-5. **Execution:** run event-processing logic through the relevant worker path.
-6. **Decision:** evaluate the applicable processing or business logic.
-7. **Output:** return, persist, or publish the result where that integration is enabled.
-8. **Accounting:** record processing outcomes and validate event integrity.
-9. **Observation:** measure processing latency, throughput, and queue behavior.
+The presence of a component, API, deployment manifest, or configuration file does not by itself prove that the complete system is integrated.
 
-### Important distinction
-
-**Message delivery, event acceptance, successful processing, and durable output are different events.** Reliable end-to-end validation must distinguish them rather than reporting a single counter as proof of the entire pipeline.
+For example, successful ingestion, successful processing, and durable persistence are separate outcomes. End-to-end validation must verify each relevant boundary independently.
 
 ---
 
-## Adaptive Scheduling
+## ⚙️ Adaptive Scheduling Engine
 
-A central engineering theme of NexusFlow is the evaluation of different processing strategies under changing workload conditions.
+A core research theme in NexusFlow is the evaluation of processing strategies under changing workload conditions.
 
 ### Processing modes
 
-<table>
-<thead>
-<tr>
-<th>Mode</th>
-<th>Concept</th>
-<th>Potential advantage</th>
-<th>Trade-off</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>SINGLE</strong></td>
-<td>Process events individually through a simpler execution path.</td>
-<td>Low coordination complexity and a useful baseline.</td>
-<td>May not exploit available parallel capacity.</td>
-</tr>
-<tr>
-<td><strong>MICRO_BATCH</strong></td>
-<td>Group multiple events before processing them.</td>
-<td>May amortize dispatch or coordination overhead.</td>
-<td>Batch formation can add waiting time; the current mode should not be assumed to provide vectorized execution.</td>
-</tr>
-<tr>
-<td><strong>PARALLEL</strong></td>
-<td>Distribute work across processing workers.</td>
-<td>May improve throughput when work can be parallelized efficiently.</td>
-<td>Introduces synchronization, scheduling, and contention costs.</td>
-</tr>
-</tbody>
-</table>
+| Mode | Strategy | Potential advantage | Trade-off |
+|---|---|---|---|
+| `SINGLE` | Process events individually through a simpler execution path. | Lower coordination complexity and a useful baseline. | May not use available parallel capacity effectively. |
+| `MICRO_BATCH` | Group multiple events before processing them. | May reduce repeated dispatch or coordination overhead. | Batch formation can increase waiting time. |
+| `PARALLEL` | Distribute processing work across workers. | May increase throughput for suitable workloads. | Synchronization, contention, and scheduling add overhead. |
+
+The current micro-batch concept should not be confused with vectorized execution or GPU-style batching. Any such capability would require a separate implementation and evaluation.
 
 ### Workload signals
 
-The scheduler design considers signals such as:
+The scheduling design considers:
 
-- **Event priority:** represent the relative importance of incoming work.
-- **Arrival rate:** estimate the rate at which events enter the system.
-- **Queue depth:** understand how much work is waiting.
-- **Remaining latency budget:** account for the time available before a processing objective is exceeded.
-- **CPU utilization:** consider available computational capacity.
-- **Worker capacity:** account for the processing resources available to execute work.
+- **Arrival rate:** how quickly new events enter the pipeline.
+- **Queue depth:** how much work is waiting.
+- **Event priority:** the relative importance of different events.
+- **Remaining latency budget:** how much time remains before an event exceeds its target.
+- **CPU utilization:** a signal of available processing capacity.
+- **Worker capacity:** the resources available to execute queued work.
 
-The design uses these signals to evaluate scheduling behavior. The exact effectiveness of each signal depends on its implementation, sampling interval, thresholds, and the workload under test.
+The quality of scheduling decisions depends on signal accuracy, sampling frequency, thresholds, workload characteristics, and the overhead introduced by the scheduler itself.
 
-### Adaptive scheduling versus fixed scheduling
+### Adaptive versus fixed scheduling
 
 | Dimension | Fixed strategy | Adaptive strategy |
 |---|---|---|
-| Processing mode | Predetermined | Selected using workload signals and policy |
-| Workload response | Requires external reconfiguration or remains unchanged | Can respond to measured conditions when implemented and enabled |
-| Operational complexity | Usually simpler | Requires tuning, observability, and decision validation |
-| Performance | Depends on the workload | Must be demonstrated experimentally |
-| Predictability | Easier to reason about in simple configurations | Requires analysis of policy transitions and overhead |
-| Correctness requirements | Must preserve event correctness | Must preserve event correctness across mode changes |
+| Processing mode | Predetermined. | Selected using workload signals and policy. |
+| Workload response | Limited without external reconfiguration. | Can respond to changing conditions when enabled and implemented. |
+| Complexity | Simpler to reason about. | Requires tuning, observability, and transition validation. |
+| Performance | Depends on workload fit. | Must be demonstrated through experiments. |
+| Operational requirements | Fewer policy parameters. | Requires careful threshold and policy management. |
 
-### Why this matters
-
-Adaptive scheduling is not automatically faster. A policy can perform worse than a fixed strategy if its decisions are noisy, its thresholds are poorly calibrated, or its switching overhead exceeds the expected benefit.
-
-The correct comparison is empirical: use equivalent event streams, controlled offered loads, repeated runs, integrity checks, and latency distributions.
+**Important:** Adaptive scheduling is a hypothesis to evaluate, not an automatic performance guarantee. A poor policy may perform worse than a fixed strategy because of noisy signals, unnecessary mode switching, or additional coordination costs.
 
 ---
 
-## Technology Stack
+## 🧠 Progressive Intelligence Architecture
 
-The repository and system design use the following technologies and engineering areas. Their presence in the project should not be interpreted as proof that every integration is production-ready.
+NexusFlow's long-term direction extends beyond event transport and processing toward an integrated event-intelligence workflow.
 
-<table>
-<thead>
-<tr>
-<th>Technology</th>
-<th>Role</th>
-</tr>
-</thead>
-<tbody>
-<tr><td><strong>C++20</strong></td><td>Core event-processing and concurrency-oriented implementation.</td></tr>
-<tr><td><strong>CMake</strong></td><td>Build configuration and native project organization.</td></tr>
-<tr><td><strong>Threads and worker pools</strong></td><td>Concurrent execution and worker lifecycle management.</td></tr>
-<tr><td><strong>Bounded queues</strong></td><td>Work buffering and queue-pressure management.</td></tr>
-<tr><td><strong>Kafka-compatible streaming</strong></td><td>Event ingestion and asynchronous message processing through broker integrations.</td></tr>
-<tr><td><strong>Redpanda</strong></td><td>Kafka-compatible broker for integration and local testing.</td></tr>
-<tr><td><strong>gRPC / TCP</strong></td><td>Service communication and networking components.</td></tr>
-<tr><td><strong>Redis / PostgreSQL</strong></td><td>Planned or evolving state and persistence integrations; verify runtime connectivity separately.</td></tr>
-<tr><td><strong>Docker / Docker Compose</strong></td><td>Containerization and multi-service environment definitions.</td></tr>
-<tr><td><strong>Kubernetes</strong></td><td>Deployment manifests, probes, service configuration, and scaling configuration.</td></tr>
-<tr><td><strong>Prometheus / Grafana</strong></td><td>Intended metrics collection and visualization.</td></tr>
-<tr><td><strong>OpenTelemetry / Tempo</strong></td><td>Intended instrumentation and trace-oriented observability.</td></tr>
-<tr><td><strong>Python data tooling</strong></td><td>Benchmark analysis, experiment processing, and data-oriented evaluation.</td></tr>
-<tr><td><strong>CTest and integration tests</strong></td><td>Native test execution and component validation.</td></tr>
-</tbody>
-</table>
+This is a staged roadmap, not a claim that all planned integrations are already functional.
+
+### Intended intelligent decision flow
+
+```mermaid
+flowchart LR
+    EVENT["Incoming Event"]
+    NORMALIZE["Validation and Normalization"]
+    FEATURES["Feature Extraction"]
+    RULES["Rules and Thresholds"]
+    ML["Optional ML Inference"]
+    RISK["Risk / Anomaly Score"]
+    EXPLAIN["Decision Explanation"]
+    ROUTE["Decision Routing"]
+    ACTION["Action / Alert / API"]
+    AUDIT["Persistence and Audit"]
+    ANALYTICS["Analytical Storage"]
+
+    EVENT --> NORMALIZE
+    NORMALIZE --> FEATURES
+    FEATURES --> RULES
+    FEATURES --> ML
+    RULES --> RISK
+    ML --> RISK
+    RISK --> EXPLAIN
+    EXPLAIN --> ROUTE
+    ROUTE --> ACTION
+    ROUTE --> AUDIT
+    AUDIT --> ANALYTICS
+```
+
+### Planned integration direction
+
+**NexusFlow → SentinelX**
+
+The intended integration direction is to use processed events and relevant signals in a security, risk, or intelligent-analysis workflow. Exact APIs, event contracts, decision responsibilities, and integration behavior must be implemented and tested before claiming a working connection.
+
+**NexusFlow → AtlasDB**
+
+The intended integration direction is to deliver suitable event records, analytical outputs, or processing metadata into an analytical storage workflow. Schema design, write semantics, query behavior, and end-to-end persistence must be validated independently.
+
+### Progressive implementation strategy
+
+1. Establish correct event ingestion and processing.
+2. Add deterministic rule-based decisions.
+3. Define stable event and decision schemas.
+4. Add risk scoring or anomaly-detection integration.
+5. Introduce explainable decision outputs.
+6. Integrate downstream services through explicit contracts.
+7. Persist outcomes and validate event accounting.
+8. Measure decision latency and throughput overhead.
+9. Test recovery, retries, duplicate delivery, and partial failures.
+10. Demonstrate the complete workflow through reproducible experiments and video.
+
+This order reduces the risk of building sophisticated intelligence on top of an unverified processing foundation.
 
 ---
 
-## Research and Benchmarks
+## 🧰 Technology Stack
 
-Performance evaluation is a central part of NexusFlow. The project has historical experiments covering saturation behavior, scheduler comparisons, and end-to-end latency.
+The project uses or explores the following technologies. Actual runtime availability and integration completeness must be verified against the repository and test results.
 
-**The figures below describe recorded experiments; they are not a freshly reproduced benchmark suite or a production service-level guarantee.**
+| Technology | Role |
+|---|---|
+| C++20 | Core processing implementation. |
+| CMake | Native build configuration. |
+| Threads and worker pools | Concurrent execution and worker lifecycle. |
+| Bounded queues | Work buffering and queue-pressure management. |
+| Kafka-compatible streaming | Event ingestion and delivery. |
+| Redpanda | Kafka-compatible broker for integration experiments. |
+| gRPC / TCP | Service communication and networking. |
+| Redis / PostgreSQL | State and persistence integrations. |
+| Python | Experiment processing and benchmark analysis. |
+| NumPy / Pandas / scikit-learn | Data analysis and potential intelligence workflows. |
+| Docker | Containerization. |
+| Docker Compose | Multi-service local environment definitions. |
+| Kubernetes | Deployment, service, health-check, and scaling configuration. |
+| Prometheus / Grafana | Intended metrics collection and visualization. |
+| OpenTelemetry / Tempo | Intended tracing and observability integration. |
+| CTest and integration tests | Native test execution and component validation. |
 
-### 1. Saturation sweep
+---
+
+## 📊 Research and Benchmarks
+
+Performance evaluation is a central part of NexusFlow. Historical experiments have examined saturation behavior, scheduler comparisons, and end-to-end latency.
+
+**The figures below are historical reported measurements, not a freshly reproduced benchmark suite or a production service-level guarantee.**
+
+### Experiment 1 — Saturation sweep
 
 <details open>
-<summary><strong>Experiment configuration and reported observations</strong></summary>
+<summary><strong>Configuration and results</strong></summary>
 
-- Reported runs: **27**
-- Events per run: **10,000**
-- Offered-load levels: **9**
-- Repetitions per load level: **3**
-- Total event workload: **270,000 events**
-- Reported offered-load range: **10,000–50,000 events per second**
-- Reported event-integrity validation: **27/27 runs passed**
-
-| Measurement | Historical reported result |
+| Parameter | Reported result |
 |---|---:|
+| Total runs | 27 |
+| Events per run | 10,000 |
+| Total event workload | 270,000 |
+| Offered-load levels | 9 |
+| Repetitions per load level | 3 |
+| Reported offered-load range | 10,000–50,000 events/s |
+| Event-integrity validation | 27/27 runs passed |
 | Estimated saturation knee | Approximately 20,000 offered events/s |
-| Recommended operating point in that experiment | Approximately 30,000 offered events/s |
+| Recommended operating point in the experiment | Approximately 30,000 offered events/s |
 | Highest measured mean throughput | 32,759.22 events/s |
-| Run integrity validation | 27/27 passed |
 
-**Interpretation:** The experiment suggests that sustainable throughput does not necessarily increase proportionally with offered load. The reported operating point is specific to the tested configuration, workload, and environment. It must not be generalized to other hardware or workloads without new measurements.
+**Interpretation:** The measurements suggest that throughput does not necessarily grow proportionally with offered load. The recommended operating point is specific to the tested configuration, workload, and environment. It must be re-evaluated after changes to the processing pipeline or execution environment.
 
 </details>
 
-### 2. Scheduler comparison
+### Experiment 2 — Scheduler comparison
 
 <details>
 <summary><strong>Comparison design and statistical limitations</strong></summary>
 
-The historical scheduler comparison used:
+The historical comparison used:
 
 - Four processing modes or configurations.
 - Five offered-load levels.
@@ -488,16 +415,16 @@ The historical scheduler comparison used:
 
 The recorded analysis reported **zero statistically significant throughput comparisons out of 15 tested comparisons**.
 
-This does not prove that the modes are equivalent. Three repetitions per configuration provide limited statistical power, particularly when run-to-run variation is substantial. More repetitions, confidence intervals, effect sizes, and controlled machine conditions are needed before making strong conclusions about scheduler superiority.
+This does not prove that the scheduling modes are equivalent. Three repetitions per configuration provide limited statistical power. Additional independent runs, confidence intervals, effect sizes, and controlled machine conditions are required for stronger conclusions.
 
 </details>
 
-### 3. End-to-end latency experiment
+### Experiment 3 — End-to-end latency
 
 <details>
-<summary><strong>Workload and historical latency results</strong></summary>
+<summary><strong>Dataset, workload, and reported measurements</strong></summary>
 
-The historical end-to-end latency experiment used the UCI Online Retail II dataset and the following offered-load levels:
+The historical experiment used the UCI Online Retail II dataset.
 
 | Parameter | Reported configuration |
 |---|---|
@@ -516,136 +443,216 @@ At an offered load of 50,000 events/s, the report recorded:
 | End-to-end P99 latency | 127,703 µs |
 | Queue-wait fraction | 99.9712% |
 
-These measurements indicate severe queue-wait dominance at the highest tested offered load in that experiment. The achieved throughput was substantially below the offered rate, consistent with a system operating beyond its sustainable processing capacity under those conditions.
+**Interpretation:** Queue waiting dominated end-to-end latency at the highest tested offered load in that experiment. Achieved throughput was below the offered rate, which is consistent with overload relative to the tested processing capacity.
 
-The results should be interpreted as diagnostic evidence, not proof of a universal performance limit. The original environment, measurement implementation, event-processing path, and experiment artifacts must be reviewed before reproducing or extending the conclusions.
+These figures are diagnostic evidence for that experiment, not a universal capacity limit. The original environment, measurement implementation, event-processing path, and raw artifacts should be reviewed before attempting to reproduce the conclusions.
 
 </details>
 
-### Benchmark interpretation
+### What the experiments teach us
 
-The experiments highlight several important engineering lessons:
+- Offered load and achieved throughput are different metrics.
+- Queue waiting can dominate latency near saturation.
+- P99 latency can reveal problems hidden by averages.
+- Event-integrity validation is separate from performance evaluation.
+- Small sample sizes can make scheduler comparisons inconclusive.
+- Every benchmark should be tied to a documented environment and version.
 
-- Offered load and achieved throughput are not interchangeable.
-- Queue waiting can dominate end-to-end latency near saturation.
-- High throughput alone does not establish acceptable P99 latency.
-- A successful event-integrity check is a separate result from a successful performance objective.
-- Small repetition counts can make comparisons statistically inconclusive.
-- Results must be associated with the machine, build configuration, workload, and experiment version that produced them.
+### Benchmark evidence to publish
 
-### Benchmark methodology
-
-A rigorous performance report should record:
+For stronger reproducibility, benchmark reports should include:
 
 - Hardware and operating system.
-- Compiler and build configuration.
-- Repository commit and configuration.
-- Warm-up policy.
-- Event count and event payload characteristics.
-- Offered load and duration.
-- Number of independent repetitions.
-- Throughput definition and measurement interval.
-- P50, P95, P99, and, where useful, P99.9 latency.
-- Queue waiting time and processing time.
+- Compiler, build configuration, and repository commit.
+- Workload parameters and event payload characteristics.
+- Warm-up policy, run duration, and repetitions.
+- Offered load and achieved throughput.
+- P50, P95, P99, and where useful P99.9 latency.
+- Queue waiting and processing time.
 - Accepted, processed, failed, rejected, and persisted event counts.
-- Confidence intervals or appropriate statistical comparisons.
-- Raw measurements and scripts used to generate summary tables.
+- Statistical analysis and uncertainty.
+- Raw measurements, analysis scripts, and artifact checksums.
 
-Raw benchmark artifacts should be published alongside the README when available. Summary figures without their measurement context are insufficient for independent verification.
+A future release should link the exact benchmark reports and artifacts used to produce its headline metrics.
 
 ---
 
-## Real-World Data and Workload Design
+## 🧪 Real-World Data and Workload Design
 
 ### UCI Online Retail II
 
 The historical end-to-end latency experiment used the **Online Retail II** dataset from the UCI Machine Learning Repository.
 
-Dataset source: [UCI Machine Learning Repository — Online Retail II](https://archive.ics.uci.edu/dataset/502/online+retail+ii)
+Dataset: [UCI Machine Learning Repository — Online Retail II](https://archive.ics.uci.edu/dataset/502/online+retail+ii)
 
-This dataset contains transactional retail records and is useful for constructing event-oriented workloads involving purchases, quantities, prices, customers, and timestamps.
+The dataset contains historical retail transactions that can support event-oriented workloads involving transaction records, quantities, prices, customer information, and timestamps.
 
-The dataset is not inherently a live event stream. A benchmark harness can replay or transform historical records into events, but that process must be documented to distinguish the original data from the generated workload.
+Historical records are not inherently a live event stream. Any replay or transformation into events should be documented, including the transformation logic and the distinction between original data and generated workload.
 
-### Synthetic workloads
+### Synthetic workload generation
 
-Synthetic events can supplement real data to control properties such as:
+Synthetic workloads can be used to control:
 
 - Arrival rate and burstiness.
-- Event size and payload distribution.
+- Event payload size.
 - Priority distribution.
 - Processing-cost variation.
 - Duplicate and malformed inputs.
-- Queue pressure and overload behavior.
+- Queue pressure and overload.
+- Recovery scenarios.
 
 Synthetic data is useful for isolating system behavior, but it should not be presented as equivalent to real production traffic.
 
-### Data integrity
+### Event-integrity model
 
-A robust event experiment should account for each event across the full tested boundary.
-
-For example:
+A meaningful test should distinguish:
 
 - Events submitted.
-- Events accepted by ingestion.
-- Events queued.
+- Events accepted.
+- Events enqueued.
 - Events successfully processed.
 - Events rejected or failed.
-- Events persisted or delivered to the downstream consumer.
+- Events persisted or delivered to downstream consumers.
 
-The exact invariant depends on the delivery model and retry behavior. Duplicates, retries, intentional rejections, and partial failures must be accounted for explicitly.
+The exact invariant depends on retry and delivery semantics. Intentional rejection, duplicate delivery, and retry behavior must be accounted for explicitly.
 
 ---
 
-## Reliability and Failure Handling
+## 🎬 Live Demo and Video Showcase
 
-Reliability is broader than a successful unit test or a running process. NexusFlow's engineering scope includes worker lifecycle management, bounded queues, streaming integration, health reporting, and deployment configuration.
+The final project should be demonstrated through short, focused videos that show **the actual system running**, rather than relying only on diagrams or screenshots.
 
-### Reliability concerns
+This section is intentionally included now so that the finished project can be documented without redesigning the README later.
 
-| Concern | Required behavior |
+### Demo gallery
+
+<div align="center">
+
+| Demo | What the video will show | Status |
+|---|---|---|
+| **01 — Project Overview** | The architecture, problem statement, and complete event-processing journey. | Planned |
+| **02 — Live Event Processing** | Events entering the system, processing activity, output, and event accounting. | Planned |
+| **03 — Adaptive Scheduling** | Workload changes, processing-mode behavior, queue pressure, and observed performance. | Planned |
+| **04 — Benchmark Laboratory** | Benchmark execution, throughput, P50/P99 latency, and experiment analysis. | Planned |
+| **05 — Failure and Recovery** | A controlled failure, the observed system response, and recovery validation. | Planned |
+| **06 — Containerized Deployment** | The verified Docker or Kubernetes deployment and its health behavior. | Planned |
+| **07 — Intelligent Decision Workflow** | The completed event-analysis, risk, explanation, and persistence workflow. | Planned |
+| **08 — End-to-End Project Demo** | A complete, verified demonstration from event ingestion to validated output. | Planned |
+
+</div>
+
+### Video 1 — Project overview
+
+**Goal:** Explain the problem and the system in approximately two to three minutes.
+
+Suggested sequence:
+
+1. Introduce the event-processing problem.
+2. Show the high-level architecture.
+3. Explain the C++ processing core and scheduling modes.
+4. Demonstrate a real workload entering the system.
+5. Show actual output and benchmark measurements.
+6. Explain the next engineering milestone.
+
+### Video 2 — Live processing demonstration
+
+The video should show:
+
+- The service starting successfully.
+- A documented event workload being submitted.
+- Actual processing activity.
+- Input and output counters.
+- Errors or rejected events, if any.
+- The validation result for the demonstrated run.
+
+A terminal recording is sufficient for the first version. A dashboard can be added later if it improves the explanation.
+
+### Video 3 — Adaptive scheduling and benchmarks
+
+The video should compare processing modes using the same workload and clearly explain:
+
+- Offered load.
+- Achieved throughput.
+- P50 and P99 latency.
+- Queue waiting time.
+- Event-integrity results.
+- Any limitations in the comparison.
+
+Do not claim that a mode is faster unless the demonstration reproduces evidence that supports the conclusion.
+
+### Video 4 — Failure and recovery
+
+Use a controlled, non-production environment to demonstrate a specific failure scenario. Show the expected behavior, actual logs or metrics, recovery outcome, and any remaining limitations.
+
+### How to add videos later
+
+Once the recordings are available, replace each `Planned` status with a link to the actual video or a short embedded preview.
+
+Example HTML for a published YouTube video:
+
+```html
+<div align="center">
+  <a href="https://www.youtube.com/watch?v=YOUR_VIDEO_ID">
+    <img
+      src="https://img.youtube.com/vi/YOUR_VIDEO_ID/maxresdefault.jpg"
+      alt="Watch the NexusFlow demonstration"
+      width="720"
+    />
+  </a>
+  <p>Watch the NexusFlow end-to-end demonstration.</p>
+</div>
+```
+
+Replace `YOUR_VIDEO_ID` with a real published video ID. Do not leave placeholder links in the finished release.
+
+**Final demo standard:** the video, benchmark artifacts, and README must describe the same tested version of the project.
+
+---
+
+## 🛡️ Reliability and Fault Tolerance
+
+A functioning event loop does not automatically establish system reliability. Queue behavior, worker shutdown, broker delivery, persistence, and service health need separate validation.
+
+| Concern | Required validation |
 |---|---|
-| Worker shutdown | Workers should stop safely and join without abandoning unaccounted work. |
-| Queue draining | Shutdown behavior should define how queued work is handled. |
-| Input overload | Backpressure or rejection behavior should be explicit and observable. |
-| Broker interruption | Recovery and redelivery behavior must be tested against the configured delivery semantics. |
-| Duplicate messages | Processing should define whether duplicates are acceptable, detected, or prevented. |
-| Persistence failure | Failed writes must not be silently reported as durable success. |
-| Service health | Health status should represent the actual conditions required for the service to operate. |
-| Restart and recovery | State and event accounting should remain correct across restarts where required. |
+| Worker shutdown | Workers stop safely and join without abandoning unaccounted work. |
+| Queue draining | Shutdown behavior defines how pending work is handled. |
+| Input overload | Backpressure or rejection behavior is explicit and observable. |
+| Broker interruption | Recovery and redelivery are tested against configured delivery semantics. |
+| Duplicate messages | Duplicate processing is defined, detected, or prevented as required. |
+| Persistence failure | Failed writes are not silently reported as durable success. |
+| Service health | Health status represents the conditions required for service operation. |
+| Restart and recovery | State and event accounting remain correct across restarts where required. |
 
 ### Delivery semantics
 
-At-least-once delivery, at-most-once delivery, and exactly-once processing are different guarantees.
+At-most-once, at-least-once, and exactly-once are distinct guarantees.
 
-A broker acknowledgement or idempotent producer does not, by itself, establish exactly-once effects across an arbitrary processing pipeline and external database. Such guarantees require a carefully defined transaction, deduplication, or idempotency strategy and end-to-end failure testing.
+A broker acknowledgement or idempotent producer does not independently establish exactly-once effects across an arbitrary processing pipeline and external database. Such guarantees require a defined transaction, idempotency, or deduplication strategy and end-to-end failure testing.
 
-NexusFlow should make delivery and persistence guarantees explicit for each supported integration rather than applying a universal label.
+NexusFlow should document the guarantees of each supported integration explicitly.
 
 ---
 
-## Observability and Deployment
+## 📈 Observability and Deployment
 
-The repository includes deployment-oriented configuration for containerized services and Kubernetes. Operational readiness still depends on validating the actual running configuration.
+The repository includes deployment-oriented configuration for containers and Kubernetes. Operational readiness still depends on testing the actual running services.
 
 ### Intended operational signals
-
-A useful observability model should include:
 
 - Incoming and processed event rates.
 - Queue depth and queue waiting time.
 - Processing latency percentiles.
-- Worker utilization and processing failures.
-- Rejected events and retry counts.
+- Worker utilization and failures.
+- Rejected events and retries.
 - Broker and storage connectivity.
 - Service health and restart counts.
-- Resource usage and saturation signals.
+- CPU and memory utilization.
+- Scheduling decisions and mode transitions.
 
-### Deployment considerations
+### Deployment validation
 
-The Kubernetes configuration includes deployment, service, health-probe, and autoscaling definitions. The existence of these manifests does not establish that autoscaling, health semantics, or all dependencies work correctly in a live cluster.
-
-Before describing a deployment as production-ready, validate:
+Before declaring a deployment operationally ready, verify:
 
 1. Container image availability and version consistency.
 2. Startup, readiness, and liveness behavior.
@@ -656,65 +663,61 @@ Before describing a deployment as production-ready, validate:
 7. Metrics and traces from the running workload.
 8. Restart and failure-recovery behavior.
 
-A successful container start is not equivalent to successful event processing.
+A running container, a passing TCP probe, or a responding health endpoint is not by itself proof that events are processed and persisted correctly.
 
 ---
 
-## Industry Applications
+## 🌍 Industry Applications
 
-NexusFlow's architecture is relevant to several event-driven domains. These are **potential application areas**, not claims of existing production deployments.
+NexusFlow's architecture is relevant to several event-driven domains. These are potential application areas, not claims of existing production deployments.
 
 <details>
 <summary><strong>Financial technology and transaction monitoring</strong></summary>
 
-Potential applications include transaction-event ingestion, rule-based screening, risk-signal processing, and time-sensitive alert routing.
-
-A real deployment would require domain-specific validation, durable event accounting, security controls, auditability, and appropriate regulatory compliance.
+Transaction events, rule-based screening, risk signals, and time-sensitive alert routing. A real deployment would require domain-specific validation, durable event accounting, security controls, auditability, and applicable regulatory compliance.
 
 </details>
 
 <details>
 <summary><strong>Cybersecurity and threat monitoring</strong></summary>
 
-Security telemetry, authentication events, and suspicious activity signals can arrive in bursts. Priority-aware processing and explicit overload behavior may help investigate how critical events should be handled during high-volume periods.
-
-Detection accuracy and operational effectiveness would need separate evaluation against suitable security datasets.
+Authentication events, security telemetry, suspicious activity signals, and high-volume alert streams. Detection quality must be evaluated separately against appropriate security datasets.
 
 </details>
 
 <details>
 <summary><strong>Retail and e-commerce</strong></summary>
 
-Order events, inventory changes, checkout activity, and customer interactions can be processed as streams. The Online Retail II dataset provides a historical transactional-data starting point for workload experiments.
+Order events, inventory changes, checkout activity, and customer interactions. The Online Retail II dataset provides a historical transactional-data starting point for workload experiments.
 
 </details>
 
 <details>
 <summary><strong>IoT and industrial telemetry</strong></summary>
 
-Sensor readings, machine-state updates, and operational alerts can produce continuous streams with varying rates and priorities. Queue management and tail-latency measurements are relevant to these workloads.
+Sensor readings, machine-state changes, and operational alerts. Queue management and tail-latency measurements are relevant to continuous telemetry workloads.
 
 </details>
 
 <details>
 <summary><strong>Cloud infrastructure and observability</strong></summary>
 
-Application logs, traces, metrics, and system events provide another workload category for studying ingestion, buffering, concurrency, and overload behavior.
+Application logs, traces, metrics, and system events. These workloads can help evaluate ingestion, buffering, concurrency, and overload behavior.
 
 </details>
 
 <details>
-<summary><strong>Logistics and supply-chain systems</strong></summary>
+<summary><strong>Logistics and supply chains</strong></summary>
 
-Shipment updates, inventory movements, and operational notifications can be modeled as event streams, with processing policies based on priority and latency requirements.
+Shipment updates, inventory movements, and operational notifications. Processing policies can be evaluated against event priority and latency requirements.
 
 </details>
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
-The repository is organized around the processing core, integrations, testing, and deployment configuration. The exact contents may evolve as development continues.
+The repository is organized around the processing core, service interfaces, testing, and deployment configuration. The structure may evolve as development continues.
 
 ```text
 NexusFlow/
@@ -736,8 +739,6 @@ NexusFlow/
 └── README.md
 ```
 
-### Key areas
-
 | Path | Responsibility |
 |---|---|
 | `core/` | Core processing logic and runtime components. |
@@ -752,24 +753,24 @@ NexusFlow/
 | `CMakeLists.txt` | Main CMake build configuration. |
 | `CMakePresets.json` | CMake preset definitions. |
 
-This overview describes the known project organization, not an exhaustive file inventory.
+This is a high-level guide, not an exhaustive inventory of every file.
 
 ---
 
-## Getting Started
+## 💻 Getting Started
 
 ### Prerequisites
 
-Before building the project, install and verify the tools required by the repository's current build configuration:
+Install and verify the tools required by the repository's current configuration:
 
 - Git.
 - A C++20-compatible compiler.
 - CMake.
 - A compatible native build tool.
-- Any third-party libraries required by the active CMake configuration.
+- Dependencies required by the active CMake configuration.
 - Docker, if using the containerized integration environment.
 
-Kafka-compatible integration tests may also require a reachable Redpanda or Kafka broker. Other integrations may require additional services.
+Streaming integration tests may also require a reachable Kafka-compatible broker. Other tests may require storage services or additional dependencies.
 
 ### 1. Clone the repository
 
@@ -778,65 +779,66 @@ git clone https://github.com/gavneet0030/NexusFlow.git
 cd NexusFlow
 ```
 
-### 2. Inspect the available CMake configuration
+### 2. Inspect the build configuration
 
-Review `CMakeLists.txt`, `CMakePresets.json`, and the documented dependencies before choosing a build preset. Presets can contain machine-specific paths, so do not assume a preset configured for one Windows installation will work on another machine or on Linux.
+Review `CMakeLists.txt`, `CMakePresets.json`, and the required dependencies before selecting a build preset.
+
+Build presets may contain machine-specific paths. A configuration that works on one Windows installation is not guaranteed to work on another machine or on Linux.
 
 ### 3. Configure and build
 
-The exact configuration command depends on the compiler, operating system, and dependencies installed on the machine. Use the repository's supported configuration and avoid manually overriding compiler flags until the generated build configuration has been inspected.
+Use the repository's supported compiler and build configuration. Inspect generated compiler flags before overriding them manually.
 
-**Current verification note:** A historical Linux CI run failed during CMake configuration before compilation and CTest could execute. Consequently, a clean, currently verified cross-platform build command cannot be guaranteed from that evidence alone.
+**Current verification note:** A historical Linux CI run failed during CMake configuration before compilation and CTest could execute. Therefore, a clean, currently verified cross-platform build cannot be guaranteed from that evidence alone.
 
-Do not interpret the presence of CMake files as evidence that every platform configuration currently builds successfully.
+This limitation is included transparently so that future fixes can be reflected in the documentation when verified.
 
-### 4. Run tests after a successful build
+### 4. Run tests
 
-Use the test targets generated by the configured build. CTest is the project's native test runner; integration tests may additionally require a broker, storage service, or other dependency.
+After a successful build, execute the tests provided by the configured project. Integration tests may additionally require a broker, storage service, or other dependency.
 
-A successful test command should be accompanied by the build configuration, test output, and the specific integration boundary that was exercised.
+Record the build configuration and test output so the result can be reproduced.
 
 ### 5. Run integration services
 
-Use the repository's container configuration only after reviewing the environment variables, secret handling, port mappings, and required services. Never use example credentials or development defaults as production credentials.
+Review the repository's container configuration before starting supporting services. Verify environment variables, port mappings, resource requirements, and secret handling. Never use development credentials as production credentials.
 
 ---
 
-## Testing and Validation
+## 🧪 Testing and Validation
 
-NexusFlow requires several complementary kinds of validation.
+NexusFlow needs multiple kinds of testing because each test establishes a different property.
 
 | Test category | What it establishes | What it does not establish |
 |---|---|---|
-| Unit tests | Behavior of an individual component. | Correctness of the full service. |
-| Concurrency tests | Selected synchronization and worker behavior under tested conditions. | Absence of every race or deadlock. |
+| Unit tests | Behavior of an individual component. | Correctness of the entire service. |
+| Concurrency tests | Selected synchronization and worker behavior. | Absence of every possible race or deadlock. |
 | Broker integration tests | Interaction with a configured streaming broker. | Correctness of every downstream integration. |
-| gRPC health tests | Response of the health endpoint under tested conditions. | Successful event processing or persistence. |
-| End-to-end tests | Behavior across the explicitly tested pipeline boundary. | Universal reliability under all failures. |
-| Load tests | Performance under the tested workload and environment. | Performance on different hardware or workloads. |
-| Deployment tests | Startup, networking, and behavior of a particular deployment. | Production readiness without broader operational validation. |
+| gRPC health tests | Health-endpoint behavior under tested conditions. | Successful event processing or persistence. |
+| End-to-end tests | Behavior across the tested pipeline boundary. | Reliability under every failure scenario. |
+| Load tests | Performance under a specific workload and environment. | Performance on different hardware or workloads. |
+| Deployment tests | Startup, networking, and tested runtime behavior. | Production readiness without broader validation. |
 
-### Recommended validation gates
+### Release validation checklist
 
-Before a release, verify:
-
-- [ ] A clean build from a documented configuration.
+- [ ] Clean build from a documented configuration.
 - [ ] Unit and integration tests pass.
-- [ ] No unexplained event-count discrepancies.
+- [ ] Event counts reconcile across tested pipeline boundaries.
 - [ ] Queue overload and shutdown behavior are tested.
 - [ ] Broker interruptions and retries are tested where applicable.
-- [ ] Health checks reflect meaningful service conditions.
+- [ ] Health checks represent meaningful service conditions.
 - [ ] End-to-end output is validated, not just input acceptance.
 - [ ] Performance measurements include tail latency and event integrity.
 - [ ] Container and Kubernetes configurations are validated.
 - [ ] Credentials are externalized and security settings are reviewed.
-- [ ] The final report records the exact commit and environment.
+- [ ] Benchmark artifacts and analysis scripts are preserved.
+- [ ] Final regression results identify the exact repository commit.
 
 ---
 
-## Performance Evaluation Methodology
+## 🔬 Performance Engineering Methodology
 
-To make benchmark claims reproducible, future experiment reports should use a consistent protocol.
+Performance improvements must be reproducible and attributable to a specific change.
 
 ### Controlled variables
 
@@ -846,13 +848,11 @@ Keep the following consistent across comparisons:
 - Machine, operating system, and compiler settings.
 - Queue capacity and worker configuration.
 - Broker and storage configuration.
-- Warm-up period and measurement duration.
+- Warm-up policy and measurement duration.
 - Offered-load generation method.
 - Event-integrity validation rules.
 
-### Performance metrics
-
-**Throughput**
+### Throughput
 
 \[
 \text{Throughput} =
@@ -862,23 +862,23 @@ Keep the following consistent across comparisons:
 
 The definition of successfully processed must be stated explicitly. Accepted events and durable outputs are not interchangeable.
 
-**End-to-end latency**
+### End-to-end latency
 
 \[
 L_{\text{end-to-end}} =
 t_{\text{completion}} - t_{\text{arrival}}
 \]
 
-Use a monotonic clock for duration measurements and define exactly where arrival and completion are recorded.
+Use a monotonic clock for duration measurements and define where arrival and completion are recorded.
 
-**Queue waiting time**
+### Queue waiting time
 
 \[
 L_{\text{queue}} =
 t_{\text{processing start}} - t_{\text{enqueue}}
 \]
 
-This metric helps distinguish queue saturation from expensive event-processing logic.
+This helps distinguish queueing delays from expensive event-processing logic.
 
 ### Statistical reporting
 
@@ -888,28 +888,28 @@ For meaningful scheduler comparisons:
 - Report median and tail latency, not only averages.
 - Include confidence intervals where appropriate.
 - Report effect sizes as well as statistical significance.
-- Record outliers and explain any exclusion criteria.
+- Record outliers and explain exclusion criteria.
 - Separate tuning experiments from final evaluation.
 - Preserve raw data so results can be independently recalculated.
 
 ---
 
-## Security Considerations
+## 🔐 Security
 
 Security must be evaluated at both the application and deployment layers.
 
-### Credentials and secrets
+### Secrets and credentials
 
 - Keep database passwords, broker credentials, API keys, and tokens out of source control.
-- Use environment-specific secret management for deployment.
-- Replace placeholder secrets before running protected services.
-- Rotate any real credential that may have been committed to a repository.
-- Avoid publishing environment files or logs that expose credentials.
+- Use environment-specific secret management.
+- Replace placeholder credentials before running protected services.
+- Rotate any real credential that may have been committed.
+- Avoid publishing environment files or logs containing secrets.
 
 ### Container security
 
-- Run services as non-root users where practical.
-- Use a read-only root filesystem where compatible with the application.
+- Run as a non-root user where practical.
+- Use a read-only root filesystem where compatible.
 - Drop unnecessary Linux capabilities.
 - Restrict writable directories.
 - Set reasonable CPU and memory limits.
@@ -925,50 +925,49 @@ Security must be evaluated at both the application and deployment layers.
 - Define timeout and failure behavior for external dependencies.
 - Test malformed input and overload conditions.
 
-These are security requirements and review criteria; their inclusion in this README is not a claim that every control has been audited or verified.
+These are security requirements and review criteria. Their presence in the documentation does not mean every control has been audited or verified.
 
 ---
 
-## Limitations and Engineering Trade-offs
+## ⚖️ Engineering Trade-offs and Current Limitations
 
-NexusFlow is being developed as an evolving systems project. Several limitations must remain explicit.
+NexusFlow is an evolving systems-engineering project. Its current and historical evidence should be interpreted with the following limitations in mind.
 
-### Performance results are environment-specific
+### Environment-specific benchmarks
 
-Historical throughput and latency values apply to the tested configuration. They should not be used as universal capacity estimates or service-level commitments.
+Historical throughput and latency measurements apply to their tested configurations. They are not universal capacity estimates or service-level commitments.
 
-### Adaptive scheduling requires further evidence
+### Adaptive scheduling needs further evidence
 
-The existence of multiple processing modes does not establish that adaptive decisions consistently outperform fixed strategies. The historical scheduler comparison did not demonstrate statistically significant throughput differences in the comparisons reported.
+The existence of multiple processing modes does not establish that adaptive decisions consistently outperform fixed strategies. The historical scheduler comparison did not demonstrate statistically significant throughput differences in the reported comparisons.
 
-### Queue implementation characteristics matter
+### Queue implementation matters
 
-Concurrency and queue names do not establish lock-free behavior. Synchronization mechanisms, contention, and wake-up behavior must be examined in the implementation before making lock-free or wait-free claims.
+A queue name does not establish lock-free or wait-free behavior. Synchronization mechanisms, contention, and wake-up behavior must be examined before making those claims.
 
-### Integration is not the same as end-to-end correctness
+### Integrations require end-to-end proof
 
-A repository can contain broker adapters, service code, storage configuration, and Kubernetes manifests while still requiring additional validation of the complete running pipeline.
+The presence of broker adapters, service code, storage configuration, and deployment manifests does not prove that the complete pipeline is functioning.
 
 ### Observability requires runtime evidence
 
-Configuration files for metrics, tracing, or dashboards do not establish that meaningful telemetry is being collected, exported, and interpreted correctly.
+Metrics and tracing configuration files do not prove that telemetry is being collected and exported correctly from a running workload.
 
-### Deployment configuration needs environment-specific verification
+### Build portability needs verification
 
-Container images, CMake presets, secrets, resource limits, and Kubernetes settings may need adjustments for different machines and environments.
+Build presets, dependencies, and compiler flags may need adjustments for different machines and environments.
 
 ### Production readiness is a separate milestone
 
-Before a production-readiness claim, the project requires a clean build, comprehensive integration and regression tests, reproducible performance results, security review, and runtime validation of the complete supported deployment.
+A production-readiness claim requires a clean build, comprehensive integration and regression tests, reproducible performance results, security review, and runtime validation of the complete supported deployment.
 
 ---
 
-## Roadmap
+## 🗺️ Roadmap
 
-The roadmap focuses on strengthening correctness and reproducibility before making stronger performance or production claims.
+The roadmap is designed to make NexusFlow progressively more capable without sacrificing correctness or reproducibility.
 
-<details open>
-<summary><strong>1. Build and CI reliability</strong></summary>
+### Phase 1 — Build and CI reliability
 
 - [ ] Resolve Linux CMake configuration failures.
 - [ ] Verify clean builds on supported platforms.
@@ -976,32 +975,23 @@ The roadmap focuses on strengthening correctness and reproducibility before maki
 - [ ] Run automated tests on the supported CI matrix.
 - [ ] Publish test results for the exact release commit.
 
-</details>
+### Phase 2 — Core processing correctness
 
-<details>
-<summary><strong>2. Processing correctness</strong></summary>
-
-- [ ] Verify timestamp and event-metadata handling.
+- [ ] Verify event timestamps and metadata handling.
 - [ ] Strengthen event accounting across ingestion and processing.
 - [ ] Test worker shutdown and queue draining under load.
 - [ ] Exercise overload, malformed inputs, and failure paths.
 - [ ] Define duplicate and retry semantics.
 
-</details>
+### Phase 3 — Streaming and persistence
 
-<details>
-<summary><strong>3. Streaming and storage integration</strong></summary>
-
-- [ ] Validate broker ingestion through actual downstream processing.
+- [ ] Validate broker ingestion through downstream processing.
 - [ ] Verify acknowledgements and consumer recovery.
 - [ ] Validate Redis and PostgreSQL runtime connectivity.
 - [ ] Test persistence failures and restart behavior.
 - [ ] Establish end-to-end event-integrity invariants.
 
-</details>
-
-<details>
-<summary><strong>4. Scheduler research</strong></summary>
+### Phase 4 — Adaptive scheduling research
 
 - [ ] Increase independent repetitions for scheduler comparisons.
 - [ ] Publish raw benchmark data and experiment metadata.
@@ -1010,53 +1000,77 @@ The roadmap focuses on strengthening correctness and reproducibility before maki
 - [ ] Compare queueing and processing costs separately.
 - [ ] Reproduce saturation experiments on documented hardware.
 
-</details>
+### Phase 5 — Intelligence and decision processing
 
-<details>
-<summary><strong>5. Operational readiness</strong></summary>
+- [ ] Define stable event and decision schemas.
+- [ ] Implement deterministic rule-based decision examples.
+- [ ] Introduce optional risk scoring or anomaly analysis.
+- [ ] Define explainable decision outputs.
+- [ ] Integrate SentinelX through documented interfaces.
+- [ ] Integrate AtlasDB through validated persistence or analytical interfaces.
+- [ ] Measure the performance cost of decision processing.
+- [ ] Validate retries, duplicates, and partial failures.
+
+### Phase 6 — Observability and deployment
 
 - [ ] Validate health probes against real service dependencies.
-- [ ] Verify that smoke tests exercise actual service behavior.
+- [ ] Verify smoke tests exercise actual service behavior.
 - [ ] Validate autoscaling metrics and resource limits.
 - [ ] Verify metrics and traces from a running deployment.
-- [ ] Remove insecure defaults and externalize secrets.
+- [ ] Externalize secrets and remove insecure defaults.
 - [ ] Complete deployment and security regression checks.
 
-</details>
+### Phase 7 — Demonstration and release
 
-<details>
-<summary><strong>6. Documentation and release</strong></summary>
-
-- [ ] Document supported build environments.
 - [ ] Publish reproducible setup and test instructions.
 - [ ] Attach benchmark artifacts and analysis scripts.
 - [ ] Record limitations and known issues for each release.
-- [ ] Produce a demonstration of the verified end-to-end path.
-- [ ] Publish a release only after the corresponding validation gates pass.
-
-</details>
+- [ ] Record a project overview video.
+- [ ] Record live processing and benchmark demonstrations.
+- [ ] Record failure and recovery demonstrations.
+- [ ] Publish the final end-to-end video.
+- [ ] Link the videos and verified release artifacts in this README.
 
 ---
 
-## Contributing
+## ✅ Release Readiness
+
+A release should be considered ready only when the relevant verification gates have been satisfied.
+
+| Gate | Required evidence |
+|---|---|
+| Build | Clean, reproducible build from documented instructions. |
+| Correctness | Unit, integration, and regression tests pass. |
+| Event integrity | Counts and outcomes reconcile across the supported pipeline. |
+| Performance | Reproducible benchmark artifacts and clearly defined metrics. |
+| Reliability | Tested shutdown, overload, and relevant recovery scenarios. |
+| Integration | Runtime validation of every integration claimed as supported. |
+| Security | Credential review and validation of applicable controls. |
+| Deployment | Verified startup, health, networking, and resource configuration. |
+| Documentation | Setup instructions, architecture, limitations, and benchmark context are accurate. |
+| Demo | Video demonstrations match the exact tested version. |
+
+A successful release should identify the exact commit, build configuration, test results, and known limitations.
+
+---
+
+## 🤝 Contributing
 
 Contributions that improve correctness, reproducibility, performance analysis, or operational reliability are welcome.
-
-### Contribution guidelines
 
 1. Open an issue describing the problem, proposed change, or experiment.
 2. Keep changes focused and explain their engineering motivation.
 3. Add or update tests for behavioral changes.
 4. Include benchmark methodology when claiming performance improvements.
-5. Document any new dependencies and configuration requirements.
+5. Document new dependencies and configuration requirements.
 6. Never include credentials, tokens, or private production data.
 7. Report unverified behavior honestly and provide reproduction steps.
 
-For performance-related contributions, include the workload, baseline, hardware, build configuration, number of repetitions, latency metrics, and event-integrity results.
+For performance-related contributions, include the workload, baseline, hardware, build configuration, repetitions, latency metrics, and event-integrity results.
 
 ---
 
-## License
+## 📄 License
 
 Before reusing or redistributing NexusFlow, check the repository for an explicit `LICENSE` file. If no license has been published, permission to use, modify, or redistribute the project should not be assumed.
 
@@ -1066,8 +1080,8 @@ Before reusing or redistributing NexusFlow, check the repository for an explicit
 
 ### Building systems that adapt to real workloads.
 
-**NexusFlow — Adaptive processing, measurable performance, and evidence-driven engineering.**
+**NexusFlow — Adaptive processing. Measurable performance. Evidence-driven engineering.**
 
-Repository: [github.com/gavneet0030/NexusFlow](https://github.com/gavneet0030/NexusFlow)
+<a href="https://github.com/gavneet0030/NexusFlow">Explore the Repository</a>
 
 </div>
