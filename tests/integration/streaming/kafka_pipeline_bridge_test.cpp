@@ -1,4 +1,4 @@
-﻿#include "streaming/kafka_consumer/kafka_consumer_adapter.hpp"
+#include "streaming/kafka_consumer/kafka_consumer_adapter.hpp"
 #include "streaming/kafka_consumer/kafka_pipeline_bridge.hpp"
 
 #include "core/event/event.hpp"
@@ -47,13 +47,16 @@ int main() {
             .time_since_epoch()
             .count();
 
+    const std::string topic =
+        "nexusflow.bridge.test." +
+        std::to_string(unique_suffix);
     const std::string group_id =
         "nexusflow-bridge-" +
         std::to_string(unique_suffix);
 
     KafkaConsumerAdapter consumer(
         "localhost:19092",
-        "nexusflow.bridge.test.20260913064317225",
+        topic,
         group_id
     );
 

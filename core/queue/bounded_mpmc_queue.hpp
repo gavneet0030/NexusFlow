@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <mutex>
 #include <queue>
+#include <stdexcept>
 #include <utility>
 
 namespace nexusflow {
@@ -14,6 +15,11 @@ class BoundedMPMCQueue {
 public:
     explicit BoundedMPMCQueue(std::size_t capacity)
         : capacity_(capacity) {
+        if (capacity == 0) {
+            throw std::invalid_argument(
+                "Queue capacity must be greater than zero."
+            );
+        }
     }
 
     bool push(const T& item) {

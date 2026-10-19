@@ -895,6 +895,22 @@ add_test(
 )
 
 
+# Bounded MPMC queue unit tests
+add_executable(bounded_mpmc_queue_test
+    tests/unit/test_queue.cpp
+)
+target_include_directories(bounded_mpmc_queue_test PRIVATE
+    ${CMAKE_SOURCE_DIR}
+)
+if(BUILD_TESTING)
+    add_test(
+        NAME bounded_mpmc_queue_test
+        COMMAND bounded_mpmc_queue_test
+    )
+    set_tests_properties(bounded_mpmc_queue_test PROPERTIES
+        TIMEOUT 30
+    )
+endif()
 # NexusFlow Kafka streaming client
 if(WIN32 AND MSVC)
     # Native MSVC dependency stack: vcpkg.
