@@ -7,7 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 if(UNIX AND NOT WIN32)
-
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(RDKAFKA REQUIRED IMPORTED_TARGET rdkafka)
 
@@ -17,30 +16,28 @@ if(UNIX AND NOT WIN32)
 
     message(STATUS "NEXUSFLOW STREAMING: Linux librdkafka via pkg-config")
 
-else()
-
-    # MSYS2 UCRT64 Windows dependency stack.
-    # librdkafka provides its CMake package under the UCRT64 prefix.
-    set(NEXUSFLOW_UCRT64_PREFIX "C:/msys64/ucrt64")
-
-    list(APPEND CMAKE_PREFIX_PATH
-        "${NEXUSFLOW_UCRT64_PREFIX}"
-    )
-
-    list(APPEND CMAKE_MODULE_PATH
-        "${NEXUSFLOW_UCRT64_PREFIX}/lib/cmake/RdKafka"
-    )
-
+elseif(WIN32 AND MSVC)
+    # Native MSVC builds use vcpkg, never MinGW import libraries.
+    set(NEXUSFLOW_VCPKG_PREFIX "C:/vcpkg/installed/x64-windows")
     find_package(RdKafka CONFIG REQUIRED
-        PATHS
-            "${NEXUSFLOW_UCRT64_PREFIX}/lib/cmake/RdKafka"
+        PATHS "${NEXUSFLOW_VCPKG_PREFIX}/share/rdkafka"
         NO_DEFAULT_PATH
     )
+    message(STATUS "NEXUSFLOW STREAMING: Windows MSVC via vcpkg")
 
-    message(STATUS "NEXUSFLOW STREAMING: Windows MSYS2 UCRT64 librdkafka")
+elseif(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
+       AND CMAKE_CXX_COMPILER MATCHES "msys64")
+    # MSYS2 GCC builds use the matching UCRT64 package.
+    find_package(RdKafka CONFIG REQUIRED
+        PATHS "C:/msys64/ucrt64/lib/cmake/RdKafka"
+        NO_DEFAULT_PATH
+    )
+    message(STATUS "NEXUSFLOW STREAMING: MSYS2 UCRT64 via RdKafka CONFIG")
 
+else()
+    message(FATAL_ERROR
+        "NEXUSFLOW STREAMING: unsupported Windows compiler/dependency combination")
 endif()
-
 add_library(
     nexusflow_streaming
     STATIC

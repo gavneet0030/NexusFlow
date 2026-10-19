@@ -144,9 +144,8 @@ void AdaptiveWorkerPool::worker_loop(
 ) {
 
     while (
-        running_.load(
-            std::memory_order_acquire
-        )
+        running_.load(std::memory_order_acquire) ||
+        queue_.size() > 0
     ) {
 
         const std::size_t active =

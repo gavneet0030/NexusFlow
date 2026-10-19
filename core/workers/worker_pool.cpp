@@ -147,6 +147,17 @@ bool WorkerPool::worker_failure_requested(
     return workers_[worker_id]->failure_requested();
 }
 
+bool WorkerPool::worker_finished(
+    std::size_t worker_id
+) const {
+
+    if (worker_id >= workers_.size()) {
+        return false;
+    }
+
+    return workers_[worker_id]->finished();
+}
+
 std::uint64_t WorkerPool::processed() const {
 
     return processed_.load(

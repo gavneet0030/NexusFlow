@@ -1,4 +1,4 @@
-﻿apiVersion: batch/v1
+apiVersion: batch/v1
 kind: Job
 metadata:
   name: nexusflow-smoke-test
@@ -14,8 +14,13 @@ spec:
       restartPolicy: Never
       containers:
         - name: nexusflow
-          image: nexusflow:linux
+          image: nexusflow:linux-service
           imagePullPolicy: Never
+
+          command: ["/app/grpc_health_smoke_client"]
+          env:
+            - name: NEXUSFLOW_GRPC_TARGET
+              value: "nexusflow:8080"
           resources:
             requests:
               cpu: "250m"

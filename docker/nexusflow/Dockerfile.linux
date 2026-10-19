@@ -1,4 +1,4 @@
-﻿FROM ubuntu:24.04 AS builder
+FROM ubuntu:24.04 AS builder
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -51,13 +51,21 @@ RUN mkdir -p /src/observability/opentelemetry/generated && \
     test -f /src/observability/opentelemetry/generated/trace_service.pb.h && \
     echo "LINUX OTLP PROTOBUF GENERATION: PASS"
 
-COPY .nexusflow/deps/redis-plus-plus-1.3.15/include/ /usr/local/include/
-COPY .nexusflow/deps/redis-plus-plus-1.3.15/generated/hiredis_features.h /usr/local/include/sw/redis++/hiredis_features.h
-COPY docker/nexusflow/redis/libredis++.so.1.3.15 /usr/local/lib/libredis++.so.1.3.15
 
-RUN ln -sf /usr/local/lib/libredis++.so.1.3.15 /usr/local/lib/libredis++.so.1 && \
-    ln -sf /usr/local/lib/libredis++.so.1 /usr/local/lib/libredis++.so && \
-    ldconfig
+# Build the pinned Redis++ release using the application's C++20 standard.
+RUN git clone --depth 1 --branch 1.3.15 https://github.com/sewenew/redis-plus-plus.git /tmp/redis-plus-plus && \
+    cmake -S /tmp/redis-plus-plus -B /tmp/redis-plus-plus/build \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_INSTALL_PREFIX=/usr/local \
+        -DCMAKE_CXX_STANDARD=20 \
+        -DREDIS_PLUS_PLUS_BUILD_TEST=OFF \
+        -DREDIS_PLUS_PLUS_BUILD_SHARED=ON \
+        -DREDIS_PLUS_PLUS_BUILD_STATIC=OFF && \
+    cmake --build /tmp/redis-plus-plus/build --parallel && \
+    cmake --install /tmp/redis-plus-plus/build && \
+    ldconfig && \
+    test -f /usr/local/include/sw/redis++/redis++.h && \
+    echo 'REDIS++ INSTALL CHECK: PASS'
 
 
 RUN mkdir -p /src/build-linux && \
@@ -66,7 +74,7 @@ RUN mkdir -p /src/build-linux && \
         -DCMAKE_BUILD_TYPE=Release \
         -DNEXUSFLOW_BUILD_TESTS=OFF \
         -DCMAKE_PREFIX_PATH="/usr/lib/x86_64-linux-gnu/cmake/protobuf;/usr/lib/x86_64-linux-gnu/cmake/grpc;/usr/lib/x86_64-linux-gnu/cmake/absl" && \
-    cmake --build /src/build-linux --target nexusflow nexusflow_service --parallel && \
+    cmake --build /src/build-linux --target nexusflow nexusflow_service grpc_health_smoke_client --parallel && \
     NEXUSFLOW_BIN="$(find /src/build-linux -type f -name nexusflow -print -quit)" && \
     NEXUSFLOW_SERVICE_BIN="$(find /src/build-linux -type f -name nexusflow_service -print -quit)" && \
     test -n "$NEXUSFLOW_BIN" && \
@@ -80,6 +88,11 @@ RUN mkdir -p /src/build-linux && \
     test -x /tmp/nexusflow && \
     test -x /tmp/nexusflow_service
 
+
+RUN NEXUSFLOW_SMOKE_CLIENT_BIN="$(find /src/build-linux -type f -name grpc_health_smoke_client -print -quit)" \
+    && test -n "$NEXUSFLOW_SMOKE_CLIENT_BIN" \
+    && cp "$NEXUSFLOW_SMOKE_CLIENT_BIN" /tmp/grpc_health_smoke_client \
+    && test -x /tmp/grpc_health_smoke_client
 FROM ubuntu:24.04 AS runtime
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -99,8 +112,9 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=builder /tmp/nexusflow /app/nexusflow
 COPY --from=builder /tmp/nexusflow_service /app/nexusflow_service
+
+COPY --from=builder /tmp/grpc_health_smoke_client /app/grpc_health_smoke_client
 COPY --from=builder /usr/local/lib/libredis++.so* /usr/local/lib/
-COPY --from=builder /usr/local/lib/libhiredis.so* /usr/local/lib/
 
 RUN ldconfig
 
@@ -115,16 +129,3 @@ WORKDIR /app
 EXPOSE 8080 9100
 
 ENTRYPOINT ["/app/nexusflow_service"]
-
-
-
-
-
-
-
-
-
-
-
-
-

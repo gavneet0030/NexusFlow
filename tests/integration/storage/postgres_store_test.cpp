@@ -1,6 +1,7 @@
-﻿#include "storage/postgres/postgres_store.hpp"
+#include "storage/postgres/postgres_store.hpp"
 #include "core/event/event.hpp"
 
+#include <chrono>
 #include <cstdint>
 #include <cstdlib>
 #include <iostream>
@@ -74,7 +75,7 @@ int main() {
 
     nexusflow::Event event{};
 
-    event.id = 9000001;
+    event.id = 9000000000ULL + static_cast<std::uint64_t>(std::chrono::steady_clock::now().time_since_epoch().count() % 1000000000000LL);
     event.timestamp_ns = 1735689600000000000ULL;
     event.priority = nexusflow::EventPriority::HIGH;
     event.value = 123.456;

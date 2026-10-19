@@ -54,21 +54,65 @@ if(WIN32)
 
     set(Protobuf_DIR
         "${NEXUSFLOW_UCRT64_PREFIX}/lib/cmake/protobuf"
-        CACHE PATH "Windows Protobuf package directory"
     )
 
     set(gRPC_DIR
         "${NEXUSFLOW_UCRT64_PREFIX}/lib/cmake/grpc"
-        CACHE PATH "Windows gRPC package directory"
     )
 
     set(absl_DIR
         "${NEXUSFLOW_UCRT64_PREFIX}/lib/cmake/absl"
-        CACHE PATH "Windows Abseil package directory"
     )
 
     find_package(absl CONFIG REQUIRED)
     find_package(Protobuf CONFIG REQUIRED)
+    # gRPC from MSYS2 requires the ZLIB::ZLIB imported target.
+    # Expose only the required ZLIB library/include paths; do not add
+    # the complete MSYS2 prefix to the global dependency search path.
+    set(ZLIB_LIBRARY
+        "${NEXUSFLOW_UCRT64_PREFIX}/lib/libz.dll.a"
+        CACHE FILEPATH "NexusFlow MSYS2 ZLIB library"
+    )
+    set(ZLIB_INCLUDE_DIR
+        "${NEXUSFLOW_UCRT64_PREFIX}/include"
+        CACHE PATH "NexusFlow MSYS2 ZLIB include directory"
+    )
+    # The MSYS2 UCRT64 gRPC package requires ZLIB::ZLIB.
+    # Define the imported target explicitly because CMake's FindZLIB
+    # does not discover the MSYS2 import library correctly under MSVC.
+    if(NOT TARGET ZLIB::ZLIB)
+        add_library(ZLIB::ZLIB UNKNOWN IMPORTED)
+        set_target_properties(ZLIB::ZLIB PROPERTIES
+            IMPORTED_LOCATION
+                "${NEXUSFLOW_UCRT64_PREFIX}/lib/libz.dll.a"
+            INTERFACE_INCLUDE_DIRECTORIES
+                "${NEXUSFLOW_UCRT64_PREFIX}/include"
+        )
+    endif()
+    # The MSYS2 UCRT64 gRPC package requires OpenSSL::SSL and
+    # OpenSSL::Crypto. Define the imported targets explicitly so
+    # the MSVC configure can consume the existing MSYS2 package.
+    if(NOT TARGET OpenSSL::Crypto)
+        add_library(OpenSSL::Crypto UNKNOWN IMPORTED)
+        set_target_properties(OpenSSL::Crypto PROPERTIES
+            IMPORTED_LOCATION
+                "${NEXUSFLOW_UCRT64_PREFIX}/lib/libcrypto.dll.a"
+            INTERFACE_INCLUDE_DIRECTORIES
+                "${NEXUSFLOW_UCRT64_PREFIX}/include"
+        )
+    endif()
+
+    if(NOT TARGET OpenSSL::SSL)
+        add_library(OpenSSL::SSL UNKNOWN IMPORTED)
+        set_target_properties(OpenSSL::SSL PROPERTIES
+            IMPORTED_LOCATION
+                "${NEXUSFLOW_UCRT64_PREFIX}/lib/libssl.dll.a"
+            INTERFACE_INCLUDE_DIRECTORIES
+                "${NEXUSFLOW_UCRT64_PREFIX}/include"
+            INTERFACE_LINK_LIBRARIES
+                OpenSSL::Crypto
+        )
+    endif()
     find_package(gRPC CONFIG REQUIRED)
 
     set(NEXUSFLOW_UCRT64_BIN
@@ -321,3 +365,16 @@ if(UNIX AND NOT WIN32)
 
 endif()
 
+# gRPC health smoke-test client used by the Kubernetes smoke-test Job.
+add_executable(grpc_health_smoke_client
+    ${CMAKE_SOURCE_DIR}/tests/integration/grpc/grpc_health_smoke_client.cpp
+)
+target_include_directories(grpc_health_smoke_client PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/generated
+)
+target_link_libraries(grpc_health_smoke_client PRIVATE
+    nexusflow_grpc_generated
+    gRPC::grpc++
+    protobuf::libprotobuf
+    ${NEXUSFLOW_GRPC_PLATFORM_LIBS}
+)

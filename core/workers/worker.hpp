@@ -33,6 +33,8 @@ public:
 
     bool failure_requested() const;
 
+    bool finished() const;
+
     const std::vector<std::uint64_t>& latencies() const;
 
 private:
@@ -56,6 +58,7 @@ private:
     std::vector<std::uint64_t> latencies_;
 
     std::atomic<bool> failure_requested_{false};
+    std::atomic<bool> finished_{true};
 };
 
 } // namespace nexusflow

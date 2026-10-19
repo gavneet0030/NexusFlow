@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.20)
 
 project(NexusFlow
     VERSION 0.1.0
@@ -896,46 +896,77 @@ add_test(
 
 
 # NexusFlow Kafka streaming client
-find_path(NEXUSFLOW_RDKAFKA_INCLUDE_DIR
-    NAMES rdkafkacpp.h
-    PATHS
-        /usr/include/librdkafka
-        /usr/local/include/librdkafka
-        C:/msys64/ucrt64/include/librdkafka
-)
-
-find_library(NEXUSFLOW_RDKAFKA_CPP_LIBRARY
-    NAMES rdkafka++ librdkafka++.dll.a
-    PATHS C:/msys64/ucrt64/lib
-)
-
-find_library(NEXUSFLOW_RDKAFKA_LIBRARY
-    NAMES rdkafka librdkafka.dll.a
-    PATHS C:/msys64/ucrt64/lib
-)
-
-if(NEXUSFLOW_RDKAFKA_INCLUDE_DIR
-   AND NEXUSFLOW_RDKAFKA_CPP_LIBRARY
-   AND NEXUSFLOW_RDKAFKA_LIBRARY)
-
-    add_library(nexusflow_kafka
-        streaming/kafka/kafka_client.cpp
+if(WIN32 AND MSVC)
+    # Native MSVC dependency stack: vcpkg.
+    find_package(RdKafka CONFIG REQUIRED
+        PATHS "C:/vcpkg/installed/x64-windows/share/rdkafka"
+        NO_DEFAULT_PATH
     )
 
-    target_include_directories(nexusflow_kafka
-        SYSTEM PUBLIC
+    add_library(nexusflow_kafka streaming/kafka/kafka_client.cpp)
+
+    target_include_directories(nexusflow_kafka SYSTEM PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        "C:/vcpkg/installed/x64-windows/include/librdkafka"
+    )
+
+    target_link_libraries(nexusflow_kafka PUBLIC
+        RdKafka::rdkafka++
+        RdKafka::rdkafka
+    )
+
+elseif(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
+       AND CMAKE_CXX_COMPILER MATCHES "msys64")
+    # MSYS2 UCRT64: use the matching MinGW libraries and headers.
+    find_package(RdKafka CONFIG REQUIRED
+        PATHS "C:/msys64/ucrt64/lib/cmake/RdKafka"
+        NO_DEFAULT_PATH
+    )
+
+    add_library(nexusflow_kafka streaming/kafka/kafka_client.cpp)
+
+    target_include_directories(nexusflow_kafka SYSTEM PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        "C:/msys64/ucrt64/include"
+        "C:/msys64/ucrt64/include/librdkafka"
+    )
+
+    target_link_libraries(nexusflow_kafka PUBLIC
+        RdKafka::rdkafka++
+        RdKafka::rdkafka
+    )
+
+else()
+    # Linux/system package discovery.
+    find_path(NEXUSFLOW_RDKAFKA_INCLUDE_DIR
+        NAMES rdkafkacpp.h
+        PATHS /usr/include/librdkafka /usr/local/include/librdkafka
+    )
+
+    find_library(NEXUSFLOW_RDKAFKA_CPP_LIBRARY NAMES rdkafka++)
+    find_library(NEXUSFLOW_RDKAFKA_LIBRARY NAMES rdkafka)
+
+    if(NEXUSFLOW_RDKAFKA_INCLUDE_DIR
+       AND NEXUSFLOW_RDKAFKA_CPP_LIBRARY
+       AND NEXUSFLOW_RDKAFKA_LIBRARY)
+
+        add_library(nexusflow_kafka streaming/kafka/kafka_client.cpp)
+
+        target_include_directories(nexusflow_kafka SYSTEM PUBLIC
             ${CMAKE_CURRENT_SOURCE_DIR}
             ${NEXUSFLOW_RDKAFKA_INCLUDE_DIR}
-            C:/msys64/ucrt64/include
-            C:/msys64/ucrt64/include/librdkafka
-    )
+        )
 
-    target_link_libraries(nexusflow_kafka
-        PUBLIC
+        target_link_libraries(nexusflow_kafka PUBLIC
             ${NEXUSFLOW_RDKAFKA_CPP_LIBRARY}
             ${NEXUSFLOW_RDKAFKA_LIBRARY}
-    )
-
+        )
+    else()
+        message(FATAL_ERROR
+            "NEXUSFLOW KAFKA: librdkafka development files not found")
+    endif()
+endif()
+if(TARGET nexusflow_kafka)
     add_executable(cpp_kafka_integration_test
         tests/integration/streaming/kafka_producer_consumer_test.cpp
     )
@@ -951,16 +982,7 @@ if(NEXUSFLOW_RDKAFKA_INCLUDE_DIR
     )
 
     message(STATUS "NEXUSFLOW KAFKA: librdkafka enabled")
-
-else()
-
-    message(FATAL_ERROR
-        "NEXUSFLOW KAFKA: librdkafka development files not found"
-    )
-
 endif()
-
-
 # ============================================================
 
 

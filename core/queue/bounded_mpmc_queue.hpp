@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>
 #include <condition_variable>
 #include <cstddef>
 #include <mutex>
@@ -110,6 +111,31 @@ public:
         return true;
     }
 
+    // Timed wait lets a worker observe a failure request without
+    // closing the queue shared by the rest of the worker pool.
+    bool pop_for(T& item, std::chrono::milliseconds timeout) {
+        std::unique_lock<std::mutex> lock(mutex_);
+
+        const bool ready = not_empty_.wait_for(
+            lock,
+            timeout,
+            [this]() {
+                return !queue_.empty() || closed_;
+            }
+        );
+
+        if (!ready || queue_.empty()) {
+            return false;
+        }
+
+        item = std::move(queue_.front());
+        queue_.pop();
+
+        lock.unlock();
+        not_full_.notify_one();
+
+        return true;
+    }
     bool try_pop(T& item) {
         std::lock_guard<std::mutex> lock(mutex_);
 

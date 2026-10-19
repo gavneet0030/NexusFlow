@@ -45,6 +45,10 @@ public:
         std::size_t worker_id
     ) const;
 
+    bool worker_finished(
+        std::size_t worker_id
+    ) const;
+
     std::uint64_t processed() const;
 
     std::uint64_t total_latency_ns() const;

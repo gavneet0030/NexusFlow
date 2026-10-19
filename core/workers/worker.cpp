@@ -1,3 +1,4 @@
+#include <chrono>
 #include "core/workers/worker.hpp"
 
 namespace nexusflow {
@@ -18,7 +19,14 @@ Worker::Worker(
 
 void Worker::start() {
 
-    thread_ = std::thread(&Worker::run, this);
+    finished_.store(false, std::memory_order_release);
+
+    try {
+        thread_ = std::thread(&Worker::run, this);
+    } catch (...) {
+        finished_.store(true, std::memory_order_release);
+        throw;
+    }
 }
 
 void Worker::join() {
@@ -51,6 +59,11 @@ bool Worker::failure_requested() const {
     );
 }
 
+bool Worker::finished() const {
+
+    return finished_.load(std::memory_order_acquire);
+}
+
 const std::vector<std::uint64_t>&
 Worker::latencies() const {
 
@@ -61,9 +74,15 @@ void Worker::run() {
 
     Event event;
 
-    while (!failure_requested_.load(
-        std::memory_order_acquire
-    ) && queue_.pop(event)) {
+    while (
+        !failure_requested_.load(std::memory_order_acquire)
+    ) {
+        if (!queue_.pop_for(event, std::chrono::milliseconds(10))) {
+            if (queue_.closed()) {
+                break;
+            }
+            continue;
+        }
 
         const ProcessingResult result =
             processor_.process(event);
@@ -111,6 +130,8 @@ void Worker::run() {
         ) {
         }
     }
+
+    finished_.store(true, std::memory_order_release);
 }
 
 } // namespace nexusflow

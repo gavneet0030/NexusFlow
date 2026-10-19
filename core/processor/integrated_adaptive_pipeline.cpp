@@ -496,9 +496,9 @@ void IntegratedAdaptivePipeline::shutdown() {
 
     shutdown_ = true;
 
-    worker_pool_.stop();
-
     queue_.close();
+
+    worker_pool_.stop();
 
     started_ = false;
 }
